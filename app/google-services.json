@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1024955469827",
+    "firebase_url": "https://eventisardegna-63477.firebaseio.com",
+    "project_id": "eventisardegna-63477",
+    "storage_bucket": "eventisardegna-63477.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024955469827:android:a8efbf1c4aadbb77",
+        "android_client_info": {
+          "package_name": "com.shardana.eventiSardinia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024955469827-17084v6po3vdlvuaim6go2fm5at44udp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shardana.eventiSardinia",
+            "certificate_hash": "19b7798f0681a5fa95a9500382da9ffb9effbac9"
+          }
+        },
+        {
+          "client_id": "1024955469827-ut3c4gqgp11kkuraa1ukgj44nsbcrnif.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNvZ36f8usrygykuSPfF23heor4Emi62I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024955469827-ut3c4gqgp11kkuraa1ukgj44nsbcrnif.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

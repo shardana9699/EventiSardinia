@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">EventiSardinia</string>
+    <string name="email">              Email</string>
+    <string name="password">           Password</string>
+    <string name="login_utente">Login Utente</string>
+    <string name="non_ti_sei_registrato_premi_qui">Non ti sei registrato? Premi qui</string>
+    <string name="accedi">Accedi</string>
+    <string name="nome">nome</string>
+    <string name="telefono">telefono</string>
+    <string name="titolo">              Titolo</string>
+    <string name="descrizione">           Descrizione</string>
+    <string name="invia">Invia</string>
+</resources>
