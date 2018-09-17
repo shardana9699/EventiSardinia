@@ -214,7 +214,7 @@ class HwAdapter extends BaseAdapter {
                 HashMap<String, String> maplist = new HashMap<String, String>();
                 maplist.put("hnames",HomeCollection.date_collection_arr.get(j).date);
                 maplist.put("hsubject",HomeCollection.date_collection_arr.get(j).titolo);
-                //maplist.put("descript",HomeCollection.date_collection_arr.get(j).latitude);
+                maplist.put("descript",HomeCollection.date_collection_arr.get(j).luogo);
                 JSONObject json1 = new JSONObject(maplist);
                 jbarrays.put(json1);
             }

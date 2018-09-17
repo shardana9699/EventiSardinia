@@ -3,6 +3,7 @@ package com.eventisardegna.shardana.eventisardinia;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,7 +34,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTitolo;
     private EditText editLuogo;
     private Button buttonEvent, getPlace;
-    public String luogo;
     public Double latitude;
     public Double longitude;
     private CalendarView mCalendar;
@@ -62,7 +62,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         String titolo = editTitolo.getText().toString().trim();
         String luogo = editLuogo.getText().toString().trim();
 
-        HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude);
+        HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude, luogo);
        // Event event = new Event(date, name, subject, description);
 
         databaseReference.child("Eventi").push().setValue(homeCollection);
@@ -112,8 +112,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
         if(requestCode == PLACE_PICKER_REQUEST){
             Place place = PlacePicker.getPlace(AdminActivity.this, data);
-            latitude = PlacePicker.getLatLngBounds(data).northeast.latitude;
-            longitude =  PlacePicker.getLatLngBounds(data).northeast.longitude;
+            latitude = place.getLatLng().latitude;
+            longitude = place.getLatLng().longitude;
         }
     }
 

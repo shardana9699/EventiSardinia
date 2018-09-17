@@ -46,7 +46,7 @@ class DialogAdaptorStudent extends BaseAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
 
-        //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_name);
+        //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_section);
         TextView tvSubject=(TextView)listViewItem.findViewById(R.id.tv_type);
        // TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
         TextView tvDescription=(TextView)listViewItem.findViewById(R.id.tv_class);

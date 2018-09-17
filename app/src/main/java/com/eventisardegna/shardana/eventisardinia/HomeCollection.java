@@ -7,19 +7,28 @@ class HomeCollection {
     public String titolo="";
     public Double latitude;
     public Double longitude;
+    public String luogo="";
 
     public HomeCollection(){
 
     }
 
     public static ArrayList<HomeCollection> date_collection_arr;
-    public HomeCollection(String date, String titolo, Double latitude, Double longitude){
+    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo){
 
         this.date=date;
         this.titolo=titolo;
         this.latitude=latitude;
         this.longitude=longitude;
+        this.luogo = luogo;
+    }
 
+    public String getLuogo() {
+        return luogo;
+    }
+
+    public void setLuogo(String luogo) {
+        this.luogo = luogo;
     }
 
     public String getDate() {
