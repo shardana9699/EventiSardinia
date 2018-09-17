@@ -45,6 +45,13 @@
             android:inputType="text" />
 
         <Button
+            android:id="@+id/getPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Scegli Posizione" />
+
+        <Button
             android:id="@+id/buttonEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

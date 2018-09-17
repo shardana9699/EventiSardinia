@@ -1,11 +1,13 @@
 package com.eventisardegna.shardana.eventisardinia;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,11 +25,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     public GregorianCalendar cal_month, cal_month_copy;
     private HwAdapter hwAdapter;
     private TextView tv_month;
-
+    private Button map;
+    private Button logout;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
 
@@ -66,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+        map = (Button) findViewById(R.id.map);
+        logout = (Button) findViewById(R.id.logout);
 
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
@@ -115,6 +120,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
         });
+
+        map.setOnClickListener(this);
+        logout.setOnClickListener(this);
     }
 
 
@@ -139,5 +147,18 @@ public class ProfileActivity extends AppCompatActivity {
         hwAdapter.refreshDays();
         hwAdapter.notifyDataSetChanged();
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == map){
+            finish();
+            startActivity(new Intent(this, MapsActivity.class));
+        }
+        if(v == logout){
+            FirebaseAuth.getInstance().signOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
     }
 }

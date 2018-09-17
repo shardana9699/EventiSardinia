@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ class HwAdapter extends BaseAdapter {
     private ArrayList<String> items;
     public static List<String> day_string;
     public ArrayList<HomeCollection>  date_collection_arr;
-    private String gridvalue;
+    private String gridvalue; //griglia calendario
     private ListView listTeachers;
     private ArrayList<Dialogpojo> alCustom=new ArrayList<Dialogpojo>();
 
@@ -130,7 +131,6 @@ class HwAdapter extends BaseAdapter {
         }
 
         setEventView(v, position,dayView);
-
         return v;
     }
 
@@ -179,10 +179,10 @@ class HwAdapter extends BaseAdapter {
 
 
 
-
+    //SERVE PER VEDERE IL CERCHIETTO CHE SEGNA L'EVENTO
     public void setEventView(View v,int pos,TextView txt){
 
-        int len=HomeCollection.date_collection_arr.size();
+       int len=HomeCollection.date_collection_arr.size();
         for (int i = 0; i < len; i++) {
             HomeCollection cal_obj=HomeCollection.date_collection_arr.get(i);
             String date=cal_obj.date;
@@ -204,6 +204,7 @@ class HwAdapter extends BaseAdapter {
             }}
     }
 
+    //RENDE L'EVENTO CLICCABILE
     public void getPositionList(String date,final Activity act){
 
         int len= HomeCollection.date_collection_arr.size();
@@ -213,7 +214,7 @@ class HwAdapter extends BaseAdapter {
                 HashMap<String, String> maplist = new HashMap<String, String>();
                 maplist.put("hnames",HomeCollection.date_collection_arr.get(j).date);
                 maplist.put("hsubject",HomeCollection.date_collection_arr.get(j).titolo);
-                maplist.put("descript",HomeCollection.date_collection_arr.get(j).luogo);
+                //maplist.put("descript",HomeCollection.date_collection_arr.get(j).latitude);
                 JSONObject json1 = new JSONObject(maplist);
                 jbarrays.put(json1);
             }
@@ -236,8 +237,9 @@ class HwAdapter extends BaseAdapter {
 
     }
 
+    //SERVE PER VEDERE DATA, TITOLO E LUOGO DELL'EVENTO
     private ArrayList<Dialogpojo> getMatchList(String detail) {
-        try {
+       try {
             JSONArray jsonArray = new JSONArray(detail);
             alCustom = new ArrayList<Dialogpojo>();
             for (int i = 0; i < jsonArray.length(); i++) {

@@ -5,18 +5,20 @@ import java.util.ArrayList;
 class HomeCollection {
     public String date="";
     public String titolo="";
-    public String luogo="";
+    public Double latitude;
+    public Double longitude;
 
     public HomeCollection(){
 
     }
 
     public static ArrayList<HomeCollection> date_collection_arr;
-    public HomeCollection(String date, String titolo, String luogo){
+    public HomeCollection(String date, String titolo, Double latitude, Double longitude){
 
         this.date=date;
         this.titolo=titolo;
-        this.luogo=luogo;
+        this.latitude=latitude;
+        this.longitude=longitude;
 
     }
 
@@ -36,12 +38,20 @@ class HomeCollection {
         this.titolo = titolo;
     }
 
-    public String getLuogo() {
-        return luogo;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLuogo(String luogo) {
-        this.luogo = luogo;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public static ArrayList<HomeCollection> getDate_collection_arr() {

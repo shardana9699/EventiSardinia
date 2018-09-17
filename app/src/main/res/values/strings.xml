@@ -10,4 +10,5 @@
     <string name="titolo">              Titolo</string>
     <string name="descrizione">           Descrizione</string>
     <string name="invia">Invia</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

@@ -46,16 +46,16 @@ class DialogAdaptorStudent extends BaseAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
 
-        TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_name);
+        //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_name);
         TextView tvSubject=(TextView)listViewItem.findViewById(R.id.tv_type);
-        TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
+       // TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
         TextView tvDescription=(TextView)listViewItem.findViewById(R.id.tv_class);
 
 
-        tvTitle.setText("Data : "+alCustom.get(position).getTitles());
-        tvSubject.setText("Titolo : "+alCustom.get(position).getSubjects());
-        tvDuedate.setText("Due Datefrvrrvrv : "+alCustom.get(position).getDuedates());
-        tvDescription.setText("Luogo : "+alCustom.get(position).getDescripts());
+        //tvTitle.setText(alCustom.get(position).getTitles());
+        tvSubject.setText(alCustom.get(position).getSubjects());
+        //tvDuedate.setText("Due Datefrvrrvrv : "+alCustom.get(position).getDuedates());
+        tvDescription.setText(alCustom.get(position).getDescripts());
 
         return  listViewItem;
     }
