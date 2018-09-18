@@ -33,6 +33,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     private EditText editDate;
     private EditText editTitolo;
     private EditText editLuogo;
+    public String luogo;
     private Button buttonEvent, getPlace;
     public Double latitude;
     public Double longitude;
@@ -48,7 +49,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         databaseReference = FirebaseDatabase.getInstance().getReference();
         editDate = (EditText) findViewById(R.id.editDate);
         editTitolo = (EditText) findViewById(R.id.editTitolo);
-        editLuogo = (EditText) findViewById(R.id.editLuogo);
+        //editLuogo = (EditText) findViewById(R.id.editLuogo);
         buttonEvent = (Button) findViewById(R.id.buttonEvent);
         getPlace = (Button) findViewById(R.id.getPlace);
 
@@ -60,7 +61,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     private void admin(){
         String date = editDate.getText().toString().trim();
         String titolo = editTitolo.getText().toString().trim();
-        String luogo = editLuogo.getText().toString().trim();
+        //String luogo = editLuogo.getText().toString().trim();
 
         HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude, luogo);
        // Event event = new Event(date, name, subject, description);
@@ -114,6 +115,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
             Place place = PlacePicker.getPlace(AdminActivity.this, data);
             latitude = place.getLatLng().latitude;
             longitude = place.getLatLng().longitude;
+            luogo = (String) place.getName();
         }
     }
 

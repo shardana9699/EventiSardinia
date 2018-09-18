@@ -35,13 +35,6 @@
             android:layout_margin="15dp"
             android:hint="Titolo"
             android:inputType="text" />
-        <EditText
-            android:id="@+id/editLuogo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:hint="Luogo"
-            android:inputType="text" />
 
         <Button
             android:id="@+id/getPlace"
