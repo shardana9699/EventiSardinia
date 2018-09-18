@@ -71,7 +71,7 @@ class DialogAdaptorStudent extends BaseAdapter {
         prenota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child("Eventi").child("prenotazioni").setValue(user.getUid());
+                databaseReference.child("prenotazioni").push().setValue(alCustom.get(position).getSubjects());
             }
         });
         //tvTitle.setText(alCustom.get(position).getTitles());
