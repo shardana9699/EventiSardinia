@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        databaseReference.child(user.getUid()).setValue(userInformation);
+        databaseReference.child("UserID").child(user.getUid()).setValue(userInformation);
 
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
