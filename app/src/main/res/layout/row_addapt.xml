@@ -96,5 +96,13 @@
         android:layout_toStartOf="@+id/tv_class"
         app:srcCompat="@drawable/ad6eabbce33bc99f09f507f2fadb5124" />
 
+    <Button
+        android:id="@+id/prenota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_class"
+        android:layout_centerHorizontal="true"
+        android:text="prenota" />
+
 
 </RelativeLayout>
