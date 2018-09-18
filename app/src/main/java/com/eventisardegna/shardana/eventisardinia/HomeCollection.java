@@ -8,19 +8,29 @@ class HomeCollection {
     public Double latitude;
     public Double longitude;
     public String luogo="";
+    public String prenotazioni="";
 
     public HomeCollection(){
 
     }
 
     public static ArrayList<HomeCollection> date_collection_arr;
-    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo){
+    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni){
 
         this.date=date;
         this.titolo=titolo;
         this.latitude=latitude;
         this.longitude=longitude;
         this.luogo = luogo;
+        this.prenotazioni = prenotazioni;
+    }
+
+    public String getPrenotazioni() {
+        return prenotazioni;
+    }
+
+    public void setPrenotazioni(String prenotazioni) {
+        this.prenotazioni = prenotazioni;
     }
 
     public String getLuogo() {
