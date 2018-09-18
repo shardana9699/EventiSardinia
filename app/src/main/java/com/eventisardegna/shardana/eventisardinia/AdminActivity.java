@@ -34,6 +34,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTitolo;
     private EditText editLuogo;
     public String luogo;
+    public String prenotazioni = "";
     private Button buttonEvent, getPlace;
     public Double latitude;
     public Double longitude;
@@ -63,7 +64,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         String titolo = editTitolo.getText().toString().trim();
         //String luogo = editLuogo.getText().toString().trim();
 
-        HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude, luogo);
+        HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude, luogo, prenotazioni);
        // Event event = new Event(date, name, subject, description);
 
         databaseReference.child("Eventi").push().setValue(homeCollection);
