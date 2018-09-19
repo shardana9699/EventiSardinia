@@ -34,6 +34,14 @@
             android:layout_height="wrap_content" />
         <EditText
             android:layout_margin="15dp"
+            android:inputType="textPersonName"
+            android:hint="@string/cognome"
+            android:id="@+id/editTextCognome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_margin="15dp"
             android:inputType="phone"
             android:hint="@string/telefono"
             android:id="@+id/editTextPhone"

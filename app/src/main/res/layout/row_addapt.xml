@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tv_type"
-        android:layout_width="218dp"
+        android:layout_width="137dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -35,9 +35,8 @@
         android:id="@+id/tv_class"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp"
+        android:layout_alignTop="@+id/tv_type"
+        android:layout_toEndOf="@+id/prenota"
         android:paddingLeft="10dp"
         android:text="event on "
         android:textColor="#696969"
@@ -63,7 +62,7 @@
         android:layout_height="1.5dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="93dp"
         android:background="#8f8e8e" />
     <ImageView
         android:layout_width="match_parent"
@@ -90,19 +89,18 @@
         android:id="@+id/imageView"
         android:layout_width="39dp"
         android:layout_height="44dp"
-        android:layout_alignBottom="@+id/tv_class"
-        android:layout_marginBottom="-2dp"
-        android:layout_marginEnd="1dp"
-        android:layout_toStartOf="@+id/tv_class"
+        android:layout_alignBottom="@+id/tv_type"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="152dp"
         app:srcCompat="@drawable/ad6eabbce33bc99f09f507f2fadb5124" />
 
     <Button
         android:id="@+id/prenota"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tv_type"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
+        android:layout_width="119dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/tv_type"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
         android:text="prenota" />
 
 

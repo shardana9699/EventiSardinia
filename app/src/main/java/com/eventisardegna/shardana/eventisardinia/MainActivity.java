@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editTextEmail;
     private EditText editTextPassword;
     private TextView textViewSignIn;
-    private EditText editTextName, editTextPhone;
+    private EditText editTextName,editTextCognome, editTextPhone;
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         editTextName = (EditText) findViewById(R.id.editTextName);
+        editTextCognome = (EditText) findViewById(R.id.editTextCognome);
         editTextPhone = (EditText) findViewById(R.id.editTextPhone);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -100,12 +101,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void saveUserInformation(){
         String name = editTextName.getText().toString().trim();
+        String cognome = editTextCognome.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
-        UserInformation userInformation = new UserInformation(name, phone);
+        UserInformation userInformation = new UserInformation(name, cognome, phone);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        databaseReference.child("UserID").child(user.getUid()).setValue(userInformation);
+        databaseReference.child("UserID").child(name + " " + cognome).setValue(userInformation);
 
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }

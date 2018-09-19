@@ -68,6 +68,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
        // Event event = new Event(date, name, subject, description);
 
         databaseReference.child("Eventi").child(titolo).setValue(homeCollection);
+
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
 
