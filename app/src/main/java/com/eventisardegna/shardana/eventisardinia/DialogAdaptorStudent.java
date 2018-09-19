@@ -64,14 +64,14 @@ class DialogAdaptorStudent extends BaseAdapter {
         //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_section);
         TextView tvSubject=(TextView)listViewItem.findViewById(R.id.tv_type);
        // TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
-        TextView tvDescription=(TextView)listViewItem.findViewById(R.id.tv_class);
+        final TextView tvDescription=(TextView)listViewItem.findViewById(R.id.tv_class);
         Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
 
         final FirebaseUser user = firebaseAuth.getCurrentUser();
         prenota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child("prenotazioni").push().setValue(alCustom.get(position).getSubjects());
+                databaseReference.child("Eventi").child("prenotazioni").child(alCustom.get(position).getSubjects()).push().setValue(user.getUid());
             }
         });
         //tvTitle.setText(alCustom.get(position).getTitles());
