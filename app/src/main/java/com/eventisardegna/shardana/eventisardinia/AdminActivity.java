@@ -77,6 +77,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view == buttonEvent){
             admin();
+            finish();
+            startActivity(new Intent(getApplicationContext(),AdminProfile.class));
         }
         if(view == getPlace){
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();

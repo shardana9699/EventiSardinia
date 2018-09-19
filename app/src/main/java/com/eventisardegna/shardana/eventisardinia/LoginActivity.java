@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if(view == buttonAdmin){
             finish();
-            startActivity(new Intent(this, AdminActivity.class));
+            startActivity(new Intent(this, AdminProfile.class));
         }
     }
 }

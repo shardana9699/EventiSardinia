@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.eventisardegna.shardana.eventisardinia.ProfileActivity">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -197,6 +194,15 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:text="Logout" />
+        <Button
+            android:id="@+id/addEvents"
+            android:layout_width="236dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="154dp"
+            android:text="Aggiungi evento" />
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
