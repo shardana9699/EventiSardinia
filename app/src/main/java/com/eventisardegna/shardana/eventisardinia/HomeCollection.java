@@ -8,7 +8,6 @@ class HomeCollection {
     public Double latitude;
     public Double longitude;
     public String luogo="";
-    public String prenotazioni="";
 
     public HomeCollection(){
 
@@ -22,16 +21,8 @@ class HomeCollection {
         this.latitude=latitude;
         this.longitude=longitude;
         this.luogo = luogo;
-        this.prenotazioni = prenotazioni;
     }
 
-    public String getPrenotazioni() {
-        return prenotazioni;
-    }
-
-    public void setPrenotazioni(String prenotazioni) {
-        this.prenotazioni = prenotazioni;
-    }
 
     public String getLuogo() {
         return luogo;
