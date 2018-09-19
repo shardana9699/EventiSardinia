@@ -67,8 +67,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         HomeCollection homeCollection = new HomeCollection(date, titolo, latitude, longitude, luogo, prenotazioni);
        // Event event = new Event(date, name, subject, description);
 
-        databaseReference.child("Eventi").push().setValue(homeCollection);
-
+        databaseReference.child("Eventi").child(titolo).setValue(homeCollection);
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
 
