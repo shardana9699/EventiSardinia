@@ -58,31 +58,29 @@ class DialogAdaptorStudent extends BaseAdapter {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        LayoutInflater inflater = context.getLayoutInflater();
-        final View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
+            LayoutInflater inflater = context.getLayoutInflater();
+            final View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
 
-        //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_section);
-        TextView tvSubject=(TextView)listViewItem.findViewById(R.id.tv_type);
-       // TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
-        final TextView tvDescription=(TextView)listViewItem.findViewById(R.id.tv_class);
-        Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
+            //TextView tvTitle=(TextView)listViewItem.findViewById(R.id.tv_section);
+            TextView tvSubject = (TextView) listViewItem.findViewById(R.id.tv_type);
+            // TextView tvDuedate=(TextView)listViewItem.findViewById(R.id.tv_desc);
+            final TextView tvDescription = (TextView) listViewItem.findViewById(R.id.tv_class);
+            final Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
 
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        prenota.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.prenota:
+            final FirebaseUser user = firebaseAuth.getCurrentUser();
+
+            prenota.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
                         databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
-                        break;
-                }
-            }
-        });
-        //tvTitle.setText(alCustom.get(position).getTitles());
-        tvSubject.setText(alCustom.get(position).getSubjects());
-        //tvDuedate.setText("Due Datefrvrrvrv : "+alCustom.get(position).getDuedates());
-        tvDescription.setText(alCustom.get(position).getDescripts());
+                    }
+            });
 
+            //tvTitle.setText(alCustom.get(position).getTitles());
+            tvSubject.setText(alCustom.get(position).getSubjects());
+            //tvDuedate.setText("Due Datefrvrrvrv : "+alCustom.get(position).getDuedates());
+            tvDescription.setText(alCustom.get(position).getDescripts());
 
         return  listViewItem;
     }

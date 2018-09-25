@@ -228,10 +228,10 @@ class HwAdapter extends BaseAdapter {
             imgCross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialogs.dismiss();
+                   dialogs.dismiss();
                 }
             });
-            dialogs.show();
+           dialogs.show();
 
         }
 
