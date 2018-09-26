@@ -13,8 +13,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -69,12 +72,43 @@ class DialogAdaptorStudent extends BaseAdapter {
 
             final FirebaseUser user = firebaseAuth.getCurrentUser();
 
+        databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
+
+            /**
+             * This method will be invoked any time the data on the database changes.
+             * Additionally, it will be invoked as soon as we connect the listener, so that we can get an initial snapshot of the data on the database.
+             * @param dataSnapshot
+             */
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // get all of the children at this level.
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                // shake hands with each of them.'
+                for (DataSnapshot child : children) {
+                    if(user.getUid().equals("OjYzaljAaFW2r5wFL84IkMKSPbz1")){
+                        prenota.setEnabled(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
             prenota.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                        databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
-                    }
+
+                    databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
+                    HomeCollection.date_collection_arr=new ArrayList<HomeCollection>();
+                }
+
+
             });
 
             //tvTitle.setText(alCustom.get(position).getTitles());
@@ -84,6 +118,8 @@ class DialogAdaptorStudent extends BaseAdapter {
 
         return  listViewItem;
     }
+
+
 
 
 }

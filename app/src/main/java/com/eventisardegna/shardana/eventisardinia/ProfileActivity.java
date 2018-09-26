@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button logout;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+    private ArrayList<Dialogpojo> alCustom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+
         map = (Button) findViewById(R.id.map);
         logout = (Button) findViewById(R.id.logout);
 
@@ -116,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String selectedGridDate = HwAdapter.day_string.get(position);
+
                 ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
             }
 
