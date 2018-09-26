@@ -239,7 +239,8 @@ class HwAdapter extends BaseAdapter {
 
     //SERVE PER VEDERE DATA, TITOLO E LUOGO DELL'EVENTO
     private ArrayList<Dialogpojo> getMatchList(String detail) {
-       try {
+
+        try {
             JSONArray jsonArray = new JSONArray(detail);
             alCustom = new ArrayList<Dialogpojo>();
             for (int i = 0; i < jsonArray.length(); i++) {
