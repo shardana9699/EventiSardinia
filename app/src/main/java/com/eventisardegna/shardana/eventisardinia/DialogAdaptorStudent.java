@@ -83,10 +83,10 @@ class DialogAdaptorStudent extends BaseAdapter {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // get all of the children at this level.
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
-                    if(user.getUid().equals("OjYzaljAaFW2r5wFL84IkMKSPbz1")){
+                    String name = (String) dataSnapshot.getValue().toString().trim();
+                    if(name.contains(user.getUid())){
                         prenota.setEnabled(false);
                     }
                 }
