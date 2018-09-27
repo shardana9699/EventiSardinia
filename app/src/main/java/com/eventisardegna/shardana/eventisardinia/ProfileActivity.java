@@ -1,5 +1,7 @@
 package com.eventisardegna.shardana.eventisardinia;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView tv_month;
     private Button map;
     private Button logout;
+    private Button calendario;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private ArrayList<Dialogpojo> alCustom;
@@ -74,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         map = (Button) findViewById(R.id.map);
         logout = (Button) findViewById(R.id.logout);
+        calendario = (Button) findViewById(R.id.calendario);
 
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
@@ -127,6 +133,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         map.setOnClickListener(this);
         logout.setOnClickListener(this);
+        calendario.setOnClickListener(this);
     }
 
 
@@ -163,6 +170,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             FirebaseAuth.getInstance().signOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        }
+        if(v == calendario){
+
         }
     }
 }
