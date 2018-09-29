@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-class HwAdapter extends BaseAdapter {
+class CalendarAdapter extends BaseAdapter {
     private Activity context;
 
     private java.util.Calendar month;
@@ -50,14 +49,15 @@ class HwAdapter extends BaseAdapter {
     private ListView listTeachers;
     private ArrayList<Dialogpojo> alCustom=new ArrayList<Dialogpojo>();
 
-    public HwAdapter(Activity context, GregorianCalendar monthCalendar,ArrayList<HomeCollection> date_collection_arr) {
+    public CalendarAdapter(Activity context, GregorianCalendar monthCalendar, ArrayList<HomeCollection> date_collection_arr) {
         this.date_collection_arr=date_collection_arr;
-        HwAdapter.day_string = new ArrayList<String>();
+        CalendarAdapter.day_string = new ArrayList<String>();
         Locale.setDefault(Locale.ITALY);
         month = monthCalendar;
         selectedDate = (GregorianCalendar) monthCalendar.clone();
         this.context = context;
         month.set(GregorianCalendar.DAY_OF_MONTH, 1);
+
         this.items = new ArrayList<String>();
         df = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
         curentDateString = df.format(selectedDate.getTime());
@@ -175,8 +175,6 @@ class HwAdapter extends BaseAdapter {
 
         return maxP;
     }
-
-
 
     //SERVE PER VEDERE IL CERCHIETTO CHE SEGNA L'EVENTO
     public void setEventView(View v,int pos,TextView txt){

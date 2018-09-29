@@ -46,32 +46,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        HomeCollection.date_collection_arr=new ArrayList<HomeCollection>();
+        HomeCollection.date_collection_arr = new ArrayList<HomeCollection>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference();
 
         databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
 
-            /**
-             * This method will be invoked any time the data on the database changes.
-             * Additionally, it will be invoked as soon as we connect the listener, so that we can get an initial snapshot of the data on the database.
-             * @param dataSnapshot
-             */
-            @Override
+
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // get all of the children at this level.
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
                     HomeCollection homeCollection = child.getValue(HomeCollection.class);
                     HomeCollection.date_collection_arr.add(homeCollection);
                 }
-
             }
 
-            @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
@@ -81,59 +73,84 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         logout = (Button) findViewById(R.id.logout);
         calendario = (Button) findViewById(R.id.calendario);
 
-        cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
-        cal_month_copy = (GregorianCalendar) cal_month.clone();
-        hwAdapter = new HwAdapter(this, cal_month,HomeCollection.date_collection_arr);
-
-        tv_month = (TextView) findViewById(R.id.tv_month);
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
-
-
-        ImageButton previous = (ImageButton) findViewById(R.id.ib_prev);
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cal_month.get(GregorianCalendar.MONTH) == 4&&cal_month.get(GregorianCalendar.YEAR)==2018) {
-                    //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
-                    //Toast.makeText(ProfileActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    setPreviousMonth();
-                    refreshCalendar();
-                }
-
-
-            }
-        });
-        ImageButton next = (ImageButton) findViewById(R.id.Ib_next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cal_month.get(GregorianCalendar.MONTH) == 5&&cal_month.get(GregorianCalendar.YEAR)==2020) {
-                    //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
-                    //Toast.makeText(ProfileActivity.this, ".", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    setNextMonth();
-                    refreshCalendar();
-                }
-            }
-        });
-        GridView gridview = (GridView) findViewById(R.id.gv_calendar);
-        gridview.setAdapter(hwAdapter);
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                String selectedGridDate = HwAdapter.day_string.get(position);
-
-                ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
-            }
-
-        });
-
         map.setOnClickListener(this);
         logout.setOnClickListener(this);
         calendario.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v == map){
+            finish();
+            startActivity(new Intent(this, MapsActivity.class));
+        }
+        if(v == logout){
+            FirebaseAuth.getInstance().signOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+        if(v == calendario){
+
+            final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_cal);
+
+            cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
+            cal_month_copy = (GregorianCalendar) cal_month.clone();
+            hwAdapter = new HwAdapter(this, cal_month,HomeCollection.date_collection_arr);
+            tv_month = (TextView) dialogs.findViewById(R.id.tv_month);
+            tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+
+            ImageButton previous = (ImageButton) dialogs.findViewById(R.id.ib_prev);
+            previous.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (cal_month.get(GregorianCalendar.MONTH) == 4&&cal_month.get(GregorianCalendar.YEAR)==2018) {
+                            //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
+                            //Toast.makeText(ProfileActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            setPreviousMonth();
+                            refreshCalendar();
+                        }
+
+                    }
+            });
+            ImageButton next = (ImageButton) dialogs.findViewById(R.id.Ib_next);
+            next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (cal_month.get(GregorianCalendar.MONTH) == 5&&cal_month.get(GregorianCalendar.YEAR)==2020) {
+                            //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
+                            //Toast.makeText(ProfileActivity.this, ".", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            setNextMonth();
+                            refreshCalendar();
+                        }
+                    }
+            });
+            GridView gridview = (GridView) dialogs.findViewById(R.id.gv_calendar);
+            gridview.setAdapter(hwAdapter);
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        String selectedGridDate = HwAdapter.day_string.get(position);
+                        ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
+                    }
+
+            });
+
+            setNextMonth();
+
+            setPreviousMonth();
+
+            refreshCalendar();
+
+            dialogs.show();
+
+        }
+
     }
 
 
@@ -160,19 +177,4 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v == map){
-            finish();
-            startActivity(new Intent(this, MapsActivity.class));
-        }
-        if(v == logout){
-            FirebaseAuth.getInstance().signOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        if(v == calendario){
-
-        }
-    }
 }
