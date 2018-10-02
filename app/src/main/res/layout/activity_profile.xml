@@ -16,20 +16,20 @@
             android:id="@+id/calendario"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignEnd="@+id/map"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="17dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/map"
+            android:layout_marginEnd="90dp"
             android:background="@drawable/calendaricon" />
 
 
         <Button
             android:id="@+id/map"
-            android:layout_width="236dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="87dp"
-            android:text="vedi mappa" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="19dp"
+            android:layout_toEndOf="@+id/logout"
+            android:background="@drawable/mapicon" />
 
         <Button
             android:id="@+id/logout"
@@ -39,6 +39,18 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:text="Logout" />
+
+        <ListView
+            android:id="@+id/row_add"
+            android:layout_width="357dp"
+            android:layout_height="345dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="86dp"
+            android:divider="#004e4e4e"
+            android:dividerHeight="0dp"></ListView>
+
 
     </RelativeLayout>
 
