@@ -62,7 +62,7 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         LayoutInflater inflater = context.getLayoutInflater();
-        final View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
+        final View listViewItem = inflater.inflate(R.layout.lista_eventi, null, true);
 
         TextView tvSubject = (TextView) listViewItem.findViewById(R.id.tv_type);
         final TextView tvDescription = (TextView) listViewItem.findViewById(R.id.tv_class);
@@ -70,7 +70,7 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
 
         final FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
+        /*databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -102,7 +102,7 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
             }
 
 
-        });
+        });*/
 
         tvSubject.setText(alCustom.get(position).getSubjects());
         tvDescription.setText(alCustom.get(position).getDescripts());
