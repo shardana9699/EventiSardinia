@@ -40,6 +40,7 @@ public class AdminProfile extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_profilei);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         HomeCollection.date_collection_arr=new ArrayList<HomeCollection>();
 
@@ -156,7 +157,6 @@ public class AdminProfile extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v == map){
-            finish();
             startActivity(new Intent(this, MapsActivity.class));
         }
         if(v == logout){

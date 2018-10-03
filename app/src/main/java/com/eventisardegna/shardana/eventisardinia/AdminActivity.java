@@ -45,6 +45,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference();

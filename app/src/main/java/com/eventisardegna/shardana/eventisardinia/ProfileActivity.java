@@ -68,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -254,7 +255,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
         if(id == R.id.map){
-            finish();
             startActivity(new Intent(this, MapsActivity.class));
         }
         if (toggle.onOptionsItemSelected(item)) {
