@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -51,10 +52,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private HwAdapter hwAdapter;
     private TextView tv_month;
     private Button map;
-    private Button logout;
     private Button calendario;
     private ArrayList<Dialogpojo> arrayEvento = new ArrayList<Dialogpojo>();
     ActionBarDrawerToggle toggle;
+
     DrawerLayout drawer;
 
     @Override
@@ -67,7 +68,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -95,9 +95,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        map = (Button) findViewById(R.id.map);
-        logout = (Button) findViewById(R.id.logout);
-        calendario = (Button) findViewById(R.id.calendario);
+
         final ListView eventi = (ListView) findViewById(R.id.row_add);
 
         databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
@@ -128,82 +126,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        map.setOnClickListener(this);
-        logout.setOnClickListener(this);
-        calendario.setOnClickListener(this);
-    }
+        }
 
     @Override
     public void onClick(View v) {
-        if(v == map){
-            finish();
-            startActivity(new Intent(this, MapsActivity.class));
-        }
-        if(v == logout){
-            FirebaseAuth.getInstance().signOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        if(v == calendario){
-
-            final Dialog dialogs = new Dialog(this);
-            dialogs.setContentView(R.layout.activity_cal);
-
-            cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
-            cal_month_copy = (GregorianCalendar) cal_month.clone();
-            hwAdapter = new HwAdapter(this, cal_month,HomeCollection.date_collection_arr);
-            tv_month = (TextView) dialogs.findViewById(R.id.tv_month);
-            tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
-
-            ImageButton previous = (ImageButton) dialogs.findViewById(R.id.ib_prev);
-            previous.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (cal_month.get(GregorianCalendar.MONTH) == 4&&cal_month.get(GregorianCalendar.YEAR)==2018) {
-                            //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
-                            //Toast.makeText(ProfileActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            setPreviousMonth();
-                            refreshCalendar();
-                        }
-
-                    }
-            });
-            ImageButton next = (ImageButton) dialogs.findViewById(R.id.Ib_next);
-            next.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (cal_month.get(GregorianCalendar.MONTH) == 5&&cal_month.get(GregorianCalendar.YEAR)==2020) {
-                            //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
-                            //Toast.makeText(ProfileActivity.this, ".", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            setNextMonth();
-                            refreshCalendar();
-                        }
-                    }
-            });
-            GridView gridview = (GridView) dialogs.findViewById(R.id.gv_calendar);
-            gridview.setAdapter(hwAdapter);
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                        String selectedGridDate = HwAdapter.day_string.get(position);
-                        ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
-                    }
-
-            });
-
-            setNextMonth();
-
-            setPreviousMonth();
-
-            refreshCalendar();
-
-            dialogs.show();
-
-        }
 
     }
 
@@ -243,19 +169,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //noinspection SimplifiableIfStatement
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -269,6 +182,86 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.calendario){
+            final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_cal);
+
+            cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
+            cal_month_copy = (GregorianCalendar) cal_month.clone();
+            hwAdapter = new HwAdapter(this, cal_month,HomeCollection.date_collection_arr);
+            tv_month = (TextView) dialogs.findViewById(R.id.tv_month);
+            tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+
+            ImageButton previous = (ImageButton) dialogs.findViewById(R.id.ib_prev);
+            previous.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cal_month.get(GregorianCalendar.MONTH) == 4&&cal_month.get(GregorianCalendar.YEAR)==2018) {
+                        //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
+                        //Toast.makeText(ProfileActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        setPreviousMonth();
+                        refreshCalendar();
+                    }
+
+                }
+            });
+            ImageButton next = (ImageButton) dialogs.findViewById(R.id.Ib_next);
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cal_month.get(GregorianCalendar.MONTH) == 5&&cal_month.get(GregorianCalendar.YEAR)==2020) {
+                        //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
+                        //Toast.makeText(ProfileActivity.this, ".", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        setNextMonth();
+                        refreshCalendar();
+                    }
+                }
+            });
+            GridView gridview = (GridView) dialogs.findViewById(R.id.gv_calendar);
+            gridview.setAdapter(hwAdapter);
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    String selectedGridDate = HwAdapter.day_string.get(position);
+                    ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
+                }
+
+            });
+
+            setNextMonth();
+
+            setPreviousMonth();
+
+            refreshCalendar();
+
+            dialogs.show();
+
+        }
+        if(id == R.id.map){
+            finish();
+            startActivity(new Intent(this, MapsActivity.class));
+        }
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
