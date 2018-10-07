@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
@@ -70,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView immma;
     public String message;
     DrawerLayout drawer;
+    DatabaseReference mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +200,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    private void firebaseSearch(String searchText){
+        mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
+        Query firebaseSearchQuery = mRef.orderByChild("titolo").startAt(searchText).endAt(searchText + "\uf0ff");
+
+        FirebaseRecyclerAdapter<Model, ViewHolder> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Model, ViewHolder>(
+                        Model.class, R.layout.lista_eventi, ViewHolder.class,firebaseSearchQuery
+                ) {
+                    @Override
+                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
+
+                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
+                    }
+                };
+
+        mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
+    }
+
+
+
     protected void setNextMonth() {
         if (cal_month.get(GregorianCalendar.MONTH) == cal_month.getActualMaximum(GregorianCalendar.MONTH)) {
             cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
@@ -249,7 +273,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                firebaseSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                firebaseSearch(newText);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
+
+
     }
 
     @Override
