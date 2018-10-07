@@ -6,8 +6,17 @@ import android.widget.Button;
 public class Dialogpojo {
     private String titles;
     private String subjects;
+    private String image;
     private String descripts;
     private Button prenota;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public void setTitles(String titles) {
         this.titles = titles;

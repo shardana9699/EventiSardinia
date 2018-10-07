@@ -13,14 +13,10 @@
         android:layout_below="@+id/ll_calendar">
 
 
-        <ListView
-            android:id="@+id/row_add"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/row_adda"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:divider="#004e4e4e"
-            android:dividerHeight="0dp"></ListView>
+            android:layout_height="match_parent"/>
 
     </RelativeLayout>
 
@@ -31,7 +27,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_tendina"
-        app:menu="@menu/activity_tendina_drawer" />
+        app:menu="@menu/activity_tendina_drawer" >
+
+    </android.support.design.widget.NavigationView>
 
 
 

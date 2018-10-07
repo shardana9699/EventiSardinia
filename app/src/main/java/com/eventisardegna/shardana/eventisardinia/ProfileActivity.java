@@ -3,7 +3,10 @@ package com.eventisardegna.shardana.eventisardinia;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -12,11 +15,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -37,11 +44,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -55,11 +64,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button calendario;
     private ArrayList<Dialogpojo> arrayEvento = new ArrayList<Dialogpojo>();
     ActionBarDrawerToggle toggle;
-
+    private ImageAdapter mAdapter;
+    private List<Dialogpojo> mUploads;
+    private RecyclerView mRecyclerView;
+    private ImageView immma;
+    public String message;
     DrawerLayout drawer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -96,38 +109,86 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        mRecyclerView = findViewById(R.id.row_adda);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final ListView eventi = (ListView) findViewById(R.id.row_add);
+        mUploads = new ArrayList<>();
+        FirebaseRecyclerAdapter<Model, ViewHolder> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Model, ViewHolder>(
+                        Model.class, R.layout.lista_eventi, ViewHolder.class, databaseReference.child("Eventi")
+                ) {
+                    @Override
+                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
 
-        databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
+                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
+                    }
+
+                    @Override
+                    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+                        ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+
+                        viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
+                            @Override
+                            public void OnItemClick(View view, int position) {
+
+                                String mTitolo = getItem(position).getTitolo();
+                                String mLuogo = getItem(position).getLuogo();
+                                String mDescrizione = getItem(position).getDescrizione();
+                                String mImage = getItem(position).getmImageUrl();
+                                Intent intent = new Intent(view.getContext(), DettagliEvento.class);
+                                intent.putExtra("title", mTitolo);
+                                intent.putExtra("description", mLuogo);
+                                intent.putExtra("descrizione", mDescrizione);
+                                intent.putExtra("image", mImage);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void OnItemLongClick(View view, int position) {
+
+                            }
+                        });
+
+                        return viewHolder;
+                    }
+                };
+
+
+
+        mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
+
+
+        /*databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
 
 
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // get all of the children at this level.
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 // shake hands with each of them.'
-                for (DataSnapshot child : children) {
-                    HomeCollection homeCollection = child.getValue(HomeCollection.class);
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    HomeCollection homeCollection = postSnapshot.getValue(HomeCollection.class);
 
                     Dialogpojo evento = new Dialogpojo();
 
                     evento.setTitles(homeCollection.date);
                     evento.setDescripts(homeCollection.luogo);
                     evento.setSubjects(homeCollection.titolo);
-                    EventAdapter eventAdapter = new EventAdapter(ProfileActivity.this, arrayEvento);
-                    eventi.setAdapter(eventAdapter);
-                    eventAdapter.add(evento);
-                    eventAdapter.notifyDataSetChanged();
-
+                    evento.setImage(homeCollection.mImageUrl);
+                    mUploads.add(evento);
                 }
+                ImageAdapter imageAdapter = new ImageAdapter(ProfileActivity.this, mUploads);
+                mRecyclerView.setAdapter(imageAdapter);
+                    //eventi.add(imageAdapter);
+                    //eventi.notifyDataSetChanged();
             }
 
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
-
-        }
+        });*/
+    }
 
     @Override
     public void onClick(View v) {

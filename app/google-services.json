@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "1024955469827-d9t6q67fafjf9sp64tne8vn6pv4shnrh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shardana.eventiSardinia",
+            "certificate_hash": "09a57110300d90bd7400b07d5750d26277efb0fc"
+          }
+        },
+        {
+          "client_id": "1024955469827-22pcufe9lqngfri503o0alvu4utb99pp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shardana.eventiSardinia",
+            "certificate_hash": "388e9e76f60b35308d731f5287a513a99a62255c"
+          }
+        },
+        {
           "client_id": "1024955469827-ut3c4gqgp11kkuraa1ukgj44nsbcrnif.apps.googleusercontent.com",
           "client_type": 3
         }

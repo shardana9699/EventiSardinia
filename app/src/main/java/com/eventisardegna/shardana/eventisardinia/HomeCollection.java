@@ -8,21 +8,40 @@ class HomeCollection {
     public Double latitude;
     public Double longitude;
     public String luogo="";
+    public String mImageUrl;
+    public String descrizione;
 
     public HomeCollection(){
 
     }
 
     public static ArrayList<HomeCollection> date_collection_arr;
-    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni){
+    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String mImageUrl, String descrizione){
 
         this.date=date;
         this.titolo=titolo;
         this.latitude=latitude;
         this.longitude=longitude;
         this.luogo = luogo;
+        this.mImageUrl = mImageUrl;
+        this.descrizione = descrizione;
     }
 
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public String getmImageUrl() {
+        return mImageUrl;
+    }
+
+    public void setmImageUrl(String mImageUrl) {
+        this.mImageUrl = mImageUrl;
+    }
 
     public String getLuogo() {
         return luogo;

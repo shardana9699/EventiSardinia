@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
     private Activity context;
     private ArrayList<Dialogpojo> alCustom;
     private String sturl;
+    private ImageView imageView;
 
     public EventAdapter(Activity context, ArrayList<Dialogpojo> alCustom) {
         super(context, 0, alCustom);
@@ -54,11 +57,11 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
         return i;
     }
 
-    @Override
+    /*@Override
     public View getView(final int position, View convertView, ViewGroup parent){
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        /*firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         LayoutInflater inflater = context.getLayoutInflater();
@@ -67,48 +70,20 @@ public class EventAdapter extends ArrayAdapter<Dialogpojo> {
         TextView tvSubject = (TextView) listViewItem.findViewById(R.id.tv_type);
         final TextView tvDescription = (TextView) listViewItem.findViewById(R.id.tv_class);
         final Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
-
+        imageView = imageView.findViewById(R.id.sfondo);
         final FirebaseUser user = firebaseAuth.getCurrentUser();
+        Picasso.with(context)
+                .load(alCustom.getImage())
+                .fit()
+                .centerCrop()
+                .into(holder.imageView);
 
-        /*databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // get all of the children at this level.
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                // shake hands with each of them.'
-                for (DataSnapshot child : children) {
-                    String name = (String) dataSnapshot.getValue().toString().trim();
-                    if(name.contains(user.getUid())){
-                        prenota.setEnabled(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
-        prenota.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
-                HomeCollection.date_collection_arr=new ArrayList<HomeCollection>();
-            }
-
-
-        });*/
 
         tvSubject.setText(alCustom.get(position).getSubjects());
         tvDescription.setText(alCustom.get(position).getDescripts());
 
         return  listViewItem;
-    }
+    }*/
 }
 
 

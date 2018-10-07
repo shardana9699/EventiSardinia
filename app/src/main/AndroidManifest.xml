@@ -56,7 +56,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".PickerActivity" />
-
+        <activity android:name=".DettagliEvento"></activity>
     </application>
 
 </manifest>
