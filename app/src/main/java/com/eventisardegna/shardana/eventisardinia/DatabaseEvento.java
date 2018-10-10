@@ -2,7 +2,7 @@ package com.eventisardegna.shardana.eventisardinia;
 
 import java.util.ArrayList;
 
-class HomeCollection {
+class DatabaseEvento {
     public String date="";
     public String titolo="";
     public Double latitude;
@@ -11,12 +11,12 @@ class HomeCollection {
     public String mImageUrl;
     public String descrizione;
 
-    public HomeCollection(){
+    public DatabaseEvento(){
 
     }
 
-    public static ArrayList<HomeCollection> date_collection_arr;
-    public HomeCollection(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String mImageUrl, String descrizione){
+    public static ArrayList<DatabaseEvento> date_collection_arr;
+    public DatabaseEvento(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String mImageUrl, String descrizione){
 
         this.date=date;
         this.titolo=titolo;
@@ -83,11 +83,11 @@ class HomeCollection {
         this.longitude = longitude;
     }
 
-    public static ArrayList<HomeCollection> getDate_collection_arr() {
+    public static ArrayList<DatabaseEvento> getDate_collection_arr() {
         return date_collection_arr;
     }
 
-    public static void setDate_collection_arr(ArrayList<HomeCollection> date_collection_arr) {
-        HomeCollection.date_collection_arr = date_collection_arr;
+    public static void setDate_collection_arr(ArrayList<DatabaseEvento> date_collection_arr) {
+        DatabaseEvento.date_collection_arr = date_collection_arr;
     }
 }

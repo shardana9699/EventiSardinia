@@ -21,20 +21,21 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ActivityRegistrazione" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AdminActivity" />
-        <activity android:name=".AdminProfile" />
+        <activity android:name=".ActivityAdmin" />
+        <activity android:name=".ProfileAdmin" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -53,10 +54,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".ActivityMaps"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".PickerActivity" />
-        <activity android:name=".DettagliEvento"></activity>
+        <activity android:name=".ActivityPicker" />
+        <activity android:name=".ActivityDettagliEvento" />
+        <activity android:name=".ActivityNavAccount"/>
+        <activity android:name=".ActivityIconVerify"></activity>
     </application>
 
 </manifest>

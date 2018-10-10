@@ -1,14 +1,7 @@
 package com.eventisardegna.shardana.eventisardinia;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -18,68 +11,62 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener , NavigationView.OnNavigationItemSelectedListener {
-    public GregorianCalendar cal_month, cal_month_copy;
-    private HwAdapter hwAdapter;
-    private TextView tv_month;
-    private Button map;
-    private Button calendario;
-    private ArrayList<Dialogpojo> arrayEvento = new ArrayList<Dialogpojo>();
+    public GregorianCalendar mese_calendario, mese_calendario_copia;
+    private AdaptCalendario adaptCalendario;
+    private TextView testo_mese;
     ActionBarDrawerToggle toggle;
-    private ImageAdapter mAdapter;
-    private List<Dialogpojo> mUploads;
+    private List<EventoPrenotabile> mUploads;
     private RecyclerView mRecyclerView;
-    private ImageView immma;
-    public String message;
+    ImageView immagineProfilo;
     DrawerLayout drawer;
     DatabaseReference mRef;
+    FirebaseAuth firebaseAuth;
+    private ImageView nav_profile_image;
+    private TextView nav_nome_utente;
+    private TextView nav_email_utente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null){
+            if(user.isEmailVerified()) {
 
+            }else{
+                startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
+            }
+        }
+        //GESTIONE ACTION BAR
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -89,12 +76,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View navView = navigationView.inflateHeaderView(R.layout.header_tendina_utente);
+        nav_profile_image = (ImageView) navView.findViewById(R.id.tendina_immagine_profilo);
+        if(user.getPhotoUrl() != null){
+            Picasso.get().load(user.getPhotoUrl()).into(nav_profile_image);
+        }
+        nav_nome_utente = (TextView) navView.findViewById(R.id.tendina_nome);
+        nav_nome_utente.setText(user.getDisplayName());
+        nav_email_utente = (TextView) navView.findViewById(R.id.tendina_email);
+        nav_email_utente.setText(user.getEmail());
 
-        HomeCollection.date_collection_arr = new ArrayList<HomeCollection>();
+
+        DatabaseEvento.date_collection_arr = new ArrayList<DatabaseEvento>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference();
-
+        //POPOLAZIONE EVENTI DA DATABASE
         databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
 
 
@@ -103,8 +100,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
-                    HomeCollection homeCollection = child.getValue(HomeCollection.class);
-                    HomeCollection.date_collection_arr.add(homeCollection);
+                    DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
+                    DatabaseEvento.date_collection_arr.add(databaseEvento);
                 }
             }
 
@@ -113,27 +110,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        //POPOLAZIONE INTERFACCIA SCORREVOLE DEGLI EVENTI
         mRecyclerView = findViewById(R.id.row_adda);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mUploads = new ArrayList<>();
-        FirebaseRecyclerAdapter<Model, ViewHolder> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Model, ViewHolder>(
-                        Model.class, R.layout.lista_eventi, ViewHolder.class, databaseReference.child("Eventi")
+        FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento>(
+                        EventoCliccabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
                 ) {
                     @Override
-                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
+                    protected void populateViewHolder(AdaptEvento viewHolder, EventoCliccabile model, int position) {
 
                         viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
                     }
 
                     @Override
-                    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
 
-                        ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                        AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
 
-                        viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
+                        adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
                             @Override
                             public void OnItemClick(View view, int position) {
 
@@ -141,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 String mLuogo = getItem(position).getLuogo();
                                 String mDescrizione = getItem(position).getDescrizione();
                                 String mImage = getItem(position).getmImageUrl();
-                                Intent intent = new Intent(view.getContext(), DettagliEvento.class);
+                                Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
                                 intent.putExtra("title", mTitolo);
                                 intent.putExtra("description", mLuogo);
                                 intent.putExtra("descrizione", mDescrizione);
@@ -155,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         });
 
-                        return viewHolder;
+                        return adaptEvento;
                     }
                 };
 
@@ -163,35 +161,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
 
-
-        /*databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
-
-
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // get all of the children at this level.
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                // shake hands with each of them.'
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    HomeCollection homeCollection = postSnapshot.getValue(HomeCollection.class);
-
-                    Dialogpojo evento = new Dialogpojo();
-
-                    evento.setTitles(homeCollection.date);
-                    evento.setDescripts(homeCollection.luogo);
-                    evento.setSubjects(homeCollection.titolo);
-                    evento.setImage(homeCollection.mImageUrl);
-                    mUploads.add(evento);
-                }
-                ImageAdapter imageAdapter = new ImageAdapter(ProfileActivity.this, mUploads);
-                mRecyclerView.setAdapter(imageAdapter);
-                    //eventi.add(imageAdapter);
-                    //eventi.notifyDataSetChanged();
-            }
-
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     @Override
@@ -199,19 +168,52 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-
+    //RICERCA EVENTO
     private void firebaseSearch(String searchText){
-        mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
-        Query firebaseSearchQuery = mRef.orderByChild("titolo").startAt(searchText).endAt(searchText + "\uf0ff");
 
-        FirebaseRecyclerAdapter<Model, ViewHolder> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Model, ViewHolder>(
-                        Model.class, R.layout.lista_eventi, ViewHolder.class,firebaseSearchQuery
+        String query = searchText.toLowerCase();
+
+        mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
+        Query firebaseSearchQuery = mRef.orderByChild("luogo").startAt(query).endAt(query + "\uf0ff");
+
+        FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento>(
+                        EventoCliccabile.class, R.layout.addapt_evento, AdaptEvento.class,firebaseSearchQuery
                 ) {
                     @Override
-                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
+                    protected void populateViewHolder(AdaptEvento viewHolder, EventoCliccabile model, int position) {
 
                         viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
+                    }
+
+                    @Override
+                    public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
+
+                        AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
+
+                        adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
+                            @Override
+                            public void OnItemClick(View view, int position) {
+
+                                String mTitolo = getItem(position).getTitolo();
+                                String mLuogo = getItem(position).getLuogo();
+                                String mDescrizione = getItem(position).getDescrizione();
+                                String mImage = getItem(position).getmImageUrl();
+                                Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
+                                intent.putExtra("title", mTitolo);
+                                intent.putExtra("description", mLuogo);
+                                intent.putExtra("descrizione", mDescrizione);
+                                intent.putExtra("image", mImage);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void OnItemLongClick(View view, int position) {
+
+                            }
+                        });
+
+                        return adaptEvento;
                     }
                 };
 
@@ -221,26 +223,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     protected void setNextMonth() {
-        if (cal_month.get(GregorianCalendar.MONTH) == cal_month.getActualMaximum(GregorianCalendar.MONTH)) {
-            cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
+        if (mese_calendario.get(GregorianCalendar.MONTH) == mese_calendario.getActualMaximum(GregorianCalendar.MONTH)) {
+            mese_calendario.set((mese_calendario.get(GregorianCalendar.YEAR) + 1), mese_calendario.getActualMinimum(GregorianCalendar.MONTH), 1);
         } else {
-            cal_month.set(GregorianCalendar.MONTH,
-                    cal_month.get(GregorianCalendar.MONTH) + 1);
+            mese_calendario.set(GregorianCalendar.MONTH,
+                    mese_calendario.get(GregorianCalendar.MONTH) + 1);
         }
     }
 
     protected void setPreviousMonth() {
-        if (cal_month.get(GregorianCalendar.MONTH) == cal_month.getActualMinimum(GregorianCalendar.MONTH)) {
-            cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
+        if (mese_calendario.get(GregorianCalendar.MONTH) == mese_calendario.getActualMinimum(GregorianCalendar.MONTH)) {
+            mese_calendario.set((mese_calendario.get(GregorianCalendar.YEAR) - 1), mese_calendario.getActualMaximum(GregorianCalendar.MONTH), 1);
         } else {
-            cal_month.set(GregorianCalendar.MONTH, cal_month.get(GregorianCalendar.MONTH) - 1);
+            mese_calendario.set(GregorianCalendar.MONTH, mese_calendario.get(GregorianCalendar.MONTH) - 1);
         }
     }
 
     public void refreshCalendar() {
-        hwAdapter.refreshDays();
-        hwAdapter.notifyDataSetChanged();
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+        adaptCalendario.refreshDays();
+        adaptCalendario.notifyDataSetChanged();
+        testo_mese.setText(android.text.format.DateFormat.format("MMMM yyyy", mese_calendario));
     }
 
     @Override
@@ -262,7 +264,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if(id == R.id.nav_logout){
             FirebaseAuth.getInstance().signOut();
             finish();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, ActivityLogin.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -299,50 +301,37 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         int id = item.getItemId();
         if(id == R.id.calendario){
             final Dialog dialogs = new Dialog(this);
-            dialogs.setContentView(R.layout.activity_cal);
+            dialogs.setContentView(R.layout.dialog_calendario);
 
-            cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
-            cal_month_copy = (GregorianCalendar) cal_month.clone();
-            hwAdapter = new HwAdapter(this, cal_month,HomeCollection.date_collection_arr);
-            tv_month = (TextView) dialogs.findViewById(R.id.tv_month);
-            tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+            mese_calendario = (GregorianCalendar) GregorianCalendar.getInstance();
+            //mese_calendario_copia = (GregorianCalendar) mese_calendario.clone();
+            adaptCalendario = new AdaptCalendario(this, mese_calendario, DatabaseEvento.date_collection_arr);
+            testo_mese = (TextView) dialogs.findViewById(R.id.tv_month);
+            testo_mese.setText(android.text.format.DateFormat.format("MMMM yyyy", mese_calendario));
 
             ImageButton previous = (ImageButton) dialogs.findViewById(R.id.ib_prev);
             previous.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (cal_month.get(GregorianCalendar.MONTH) == 4&&cal_month.get(GregorianCalendar.YEAR)==2018) {
-                        //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
-                        //Toast.makeText(ProfileActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        setPreviousMonth();
-                        refreshCalendar();
-                    }
-
+                    setPreviousMonth();
+                    refreshCalendar();
                 }
             });
             ImageButton next = (ImageButton) dialogs.findViewById(R.id.Ib_next);
             next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (cal_month.get(GregorianCalendar.MONTH) == 5&&cal_month.get(GregorianCalendar.YEAR)==2020) {
-                        //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
-                        //Toast.makeText(ProfileActivity.this, ".", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        setNextMonth();
-                        refreshCalendar();
-                    }
+                    setNextMonth();
+                    refreshCalendar();
                 }
             });
             GridView gridview = (GridView) dialogs.findViewById(R.id.gv_calendar);
-            gridview.setAdapter(hwAdapter);
+            gridview.setAdapter(adaptCalendario);
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    String selectedGridDate = HwAdapter.day_string.get(position);
-                    ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
+                    String selectedGridDate = AdaptCalendario.day_string.get(position);
+                    ((AdaptCalendario) parent.getAdapter()).getPositionList(selectedGridDate, ProfileActivity.this);
                 }
 
             });
@@ -357,7 +346,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
         if(id == R.id.map){
-            startActivity(new Intent(this, MapsActivity.class));
+            startActivity(new Intent(this, ActivityMaps.class));
         }
         if (toggle.onOptionsItemSelected(item)) {
             return true;

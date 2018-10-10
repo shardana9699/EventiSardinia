@@ -3,7 +3,7 @@ package com.eventisardegna.shardana.eventisardinia;
 
 import android.widget.Button;
 
-public class Dialogpojo {
+public class EventoPrenotabile {
     private String titles;
     private String subjects;
     private String image;

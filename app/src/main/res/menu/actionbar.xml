@@ -2,7 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
         android:id="@+id/search"
         android:icon="@drawable/search"
@@ -11,12 +10,12 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
     <item
         android:id="@+id/calendario"
-        android:icon="@drawable/calendaricon"
+        android:icon="@drawable/calendario"
         android:title="Calendar"
         app:showAsAction="always" />
     <item
         android:id="@+id/map"
-        android:icon="@drawable/mapicon"
+        android:icon="@drawable/map"
         android:title="Map"
         app:showAsAction="always" />
 </menu>

@@ -6,12 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.regex.Pattern;
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class ActivityRegistrazione extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
     private EditText editTextEmail;
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_registrazione);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -89,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //Attivita del profilo
                         saveUserInformation();
                         finish();
-                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                        startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
                 }else{
-                    Toast.makeText(MainActivity.this,"Errore nella registrazione,Riprova",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityRegistrazione.this,"Errore nella registrazione,Riprova",Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
@@ -104,11 +101,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String name = editTextName.getText().toString().trim();
         String cognome = editTextCognome.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
-        UserInformation userInformation = new UserInformation(name, cognome, phone);
+        DatabaseUtente databaseUtente = new DatabaseUtente(name, cognome, phone);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null) {
+            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name + " " + cognome).build();
+            user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
 
-        databaseReference.child("UserID").child(name + " " + cognome).setValue(userInformation);
+                    }
+                }
+            });
+        }
+
+        databaseReference.child("UserID").child(name + " " + cognome).setValue(databaseUtente);
 
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
@@ -120,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(view == textViewSignIn){
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this,ActivityLogin.class));
         }
     }
 }

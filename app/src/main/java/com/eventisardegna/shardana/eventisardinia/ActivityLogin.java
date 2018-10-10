@@ -16,8 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class ActivityLogin extends AppCompatActivity implements View.OnClickListener{
 
     private Button buttonSignIn, buttonAdmin;
     private EditText editTextEmail;
@@ -35,11 +36,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null){
             //Attivita del profilo
             finish();
             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
         }
+
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
@@ -90,11 +93,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if(view == textViewSignUp){
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, ActivityRegistrazione.class));
         }
         if(view == buttonAdmin){
             finish();
-            startActivity(new Intent(this, AdminProfile.class));
+            startActivity(new Intent(this, ProfileAdmin.class));
         }
     }
 }

@@ -11,7 +11,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -22,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,LocationListener,GoogleMap.OnMarkerClickListener {
+public class ActivityMaps extends FragmentActivity implements OnMapReadyCallback,LocationListener,GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private ChildEventListener mChildEventListener;
@@ -68,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot s: dataSnapshot.getChildren()){
-                    HomeCollection evento = s.getValue(HomeCollection.class);
+                    DatabaseEvento evento = s.getValue(DatabaseEvento.class);
                     LatLng location = new LatLng(evento.latitude, evento.longitude);
                     mMap.addMarker(new MarkerOptions().position(location).title(evento.titolo));
                 }

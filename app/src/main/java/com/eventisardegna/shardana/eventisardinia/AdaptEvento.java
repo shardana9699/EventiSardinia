@@ -1,23 +1,18 @@
 package com.eventisardegna.shardana.eventisardinia;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class AdaptEvento extends RecyclerView.ViewHolder {
 
     View mView;
 
-    public ViewHolder(final View itemView) {
+    public AdaptEvento(final View itemView) {
         super(itemView);
 
         mView = itemView;
@@ -41,21 +36,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvSubject = mView.findViewById(R.id.tv_type);
         TextView tvDescription = mView.findViewById(R.id.tv_class);
-        ImageView imageViewTv = mView.findViewById(R.id.immagine);
+        ImageView ivImage = mView.findViewById(R.id.immagine);
 
         tvSubject.setText(title);
         tvDescription.setText(subject);
-        Picasso.get().load(image).into(imageViewTv);
+        Picasso.get().load(image).into(ivImage);
     }
 
-    private ViewHolder.ClickListener mClickListener;
+    private AdaptEvento.ClickListener mClickListener;
 
     public interface ClickListener{
         void OnItemClick(View view, int position);
         void OnItemLongClick(View view, int position);
     }
 
-    public void setOnClickListener(ViewHolder.ClickListener clickListener){
+    public void setOnClickListener(AdaptEvento.ClickListener clickListener){
         mClickListener = clickListener;
     }
 }

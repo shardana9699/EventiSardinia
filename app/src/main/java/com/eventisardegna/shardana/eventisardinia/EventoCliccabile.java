@@ -1,9 +1,9 @@
 package com.eventisardegna.shardana.eventisardinia;
 
-public class Model {
+public class EventoCliccabile {
     String titolo, luogo, mImageUrl, descrizione;
 
-    public Model(){}
+    public EventoCliccabile(){}
 
     public String getDescrizione() {
         return descrizione;

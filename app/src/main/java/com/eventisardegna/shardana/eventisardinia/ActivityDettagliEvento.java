@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class DettagliEvento extends AppCompatActivity {
+public class ActivityDettagliEvento extends AppCompatActivity {
 
 
     TextView titolo, luogo, descrizione;

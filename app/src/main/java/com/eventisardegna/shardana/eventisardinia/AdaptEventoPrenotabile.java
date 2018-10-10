@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,17 +20,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-class DialogAdaptorStudent extends BaseAdapter {
+class AdaptEventoPrenotabile extends BaseAdapter {
     Activity activity;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private Activity context;
-    private ArrayList<Dialogpojo> alCustom;
+    private ArrayList<EventoPrenotabile> alCustom;
     private String sturl;
 
 
-    public DialogAdaptorStudent(Activity context, ArrayList<Dialogpojo> alCustom) {
+    public AdaptEventoPrenotabile(Activity context, ArrayList<EventoPrenotabile> alCustom) {
         this.context = context;
         this.alCustom = alCustom;
 
@@ -62,7 +61,7 @@ class DialogAdaptorStudent extends BaseAdapter {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
             LayoutInflater inflater = context.getLayoutInflater();
-            final View listViewItem = inflater.inflate(R.layout.row_addapt, null, true);
+            final View listViewItem = inflater.inflate(R.layout.addapt_prenotazione, null, true);
 
             TextView tvSubject = (TextView) listViewItem.findViewById(R.id.tv_type);
             final TextView tvDescription = (TextView) listViewItem.findViewById(R.id.tv_class);
@@ -103,7 +102,7 @@ class DialogAdaptorStudent extends BaseAdapter {
                 public void onClick(View v) {
 
                     databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
-                    HomeCollection.date_collection_arr=new ArrayList<HomeCollection>();
+                    DatabaseEvento.date_collection_arr=new ArrayList<DatabaseEvento>();
                 }
 
 

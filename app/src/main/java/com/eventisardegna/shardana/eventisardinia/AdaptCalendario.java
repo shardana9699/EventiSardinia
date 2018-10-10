@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-class HwAdapter extends BaseAdapter {
+class AdaptCalendario extends BaseAdapter {
     private Activity context;
 
     private java.util.Calendar month;
@@ -45,14 +44,14 @@ class HwAdapter extends BaseAdapter {
 
     private ArrayList<String> items;
     public static List<String> day_string;
-    public ArrayList<HomeCollection>  date_collection_arr;
+    public ArrayList<DatabaseEvento>  date_collection_arr;
     private String gridvalue; //griglia calendario
     private ListView listTeachers;
-    private ArrayList<Dialogpojo> alCustom=new ArrayList<Dialogpojo>();
+    private ArrayList<EventoPrenotabile> alCustom=new ArrayList<EventoPrenotabile>();
 
-    public HwAdapter(Activity context, GregorianCalendar monthCalendar,ArrayList<HomeCollection> date_collection_arr) {
+    public AdaptCalendario(Activity context, GregorianCalendar monthCalendar, ArrayList<DatabaseEvento> date_collection_arr) {
         this.date_collection_arr=date_collection_arr;
-        HwAdapter.day_string = new ArrayList<String>();
+        AdaptCalendario.day_string = new ArrayList<String>();
         Locale.setDefault(Locale.ITALY);
         month = monthCalendar;
         selectedDate = (GregorianCalendar) monthCalendar.clone();
@@ -84,7 +83,7 @@ class HwAdapter extends BaseAdapter {
         if (convertView == null) { // if it's not recycled, initialize some
             // attributes
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.cal_item, null);
+            v = vi.inflate(R.layout.giorno_calendario, null);
 
         }
 
@@ -94,7 +93,7 @@ class HwAdapter extends BaseAdapter {
 
 
         gridvalue = separatedTime[2].replaceFirst("^0*", "");
-        if ((Integer.parseInt(gridvalue) > 1) && (position < firstDay)) {
+        if ((Integer.parseInt(gridvalue) > 1) && (position < firstDay-1)) {
             dayView.setTextColor(Color.parseColor("#A9A9A9"));
             dayView.setClickable(false);
             dayView.setFocusable(false);
@@ -146,7 +145,7 @@ class HwAdapter extends BaseAdapter {
         // allocating maximum row number for the gridview.
         mnthlength = 42;
         maxP = getMaxP(); // previous month maximum day 31,30....
-        calMaxP = maxP - (firstDay - 2);// calendar offday starting 24,25 ...
+        calMaxP = maxP - (firstDay + 2);// calendar offday starting 24,25 ...
         pmonthmaxset = (GregorianCalendar) pmonth.clone();
 
         pmonthmaxset.set(GregorianCalendar.DAY_OF_MONTH, calMaxP + 1);
@@ -176,14 +175,12 @@ class HwAdapter extends BaseAdapter {
         return maxP;
     }
 
-
-
     //SERVE PER VEDERE IL CERCHIETTO CHE SEGNA L'EVENTO
     public void setEventView(View v,int pos,TextView txt){
 
-       int len=HomeCollection.date_collection_arr.size();
+       int len= DatabaseEvento.date_collection_arr.size();
         for (int i = 0; i < len; i++) {
-            HomeCollection cal_obj=HomeCollection.date_collection_arr.get(i);
+            DatabaseEvento cal_obj= DatabaseEvento.date_collection_arr.get(i);
             String date=cal_obj.date;
             int len1=day_string.size();
             if (len1>pos) {
@@ -206,24 +203,24 @@ class HwAdapter extends BaseAdapter {
     //RENDE L'EVENTO CLICCABILE
     public void getPositionList(String date,final Activity act){
 
-        int len= HomeCollection.date_collection_arr.size();
+        int len= DatabaseEvento.date_collection_arr.size();
         JSONArray jbarrays=new JSONArray();
         for (int j=0; j<len; j++){
-            if (HomeCollection.date_collection_arr.get(j).date.equals(date)){
+            if (DatabaseEvento.date_collection_arr.get(j).date.equals(date)){
                 HashMap<String, String> maplist = new HashMap<String, String>();
-                maplist.put("hnames",HomeCollection.date_collection_arr.get(j).date);
-                maplist.put("hsubject",HomeCollection.date_collection_arr.get(j).titolo);
-                maplist.put("descript",HomeCollection.date_collection_arr.get(j).luogo);
+                maplist.put("hnames", DatabaseEvento.date_collection_arr.get(j).date);
+                maplist.put("hsubject", DatabaseEvento.date_collection_arr.get(j).titolo);
+                maplist.put("descript", DatabaseEvento.date_collection_arr.get(j).luogo);
                 JSONObject json1 = new JSONObject(maplist);
                 jbarrays.put(json1);
             }
         }
         if (jbarrays.length()!=0) {
             final Dialog dialogs = new Dialog(context);
-            dialogs.setContentView(R.layout.dialog_inform);
+            dialogs.setContentView(R.layout.dialog_prenotazione);
             listTeachers = (ListView) dialogs.findViewById(R.id.list_teachers);
             ImageView imgCross = (ImageView) dialogs.findViewById(R.id.img_cross);
-            listTeachers.setAdapter(new DialogAdaptorStudent(context, getMatchList(jbarrays + "")));
+            listTeachers.setAdapter(new AdaptEventoPrenotabile(context, getMatchList(jbarrays + "")));
             imgCross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -237,16 +234,16 @@ class HwAdapter extends BaseAdapter {
     }
 
     //SERVE PER VEDERE DATA, TITOLO E LUOGO DELL'EVENTO
-    private ArrayList<Dialogpojo> getMatchList(String detail) {
+    private ArrayList<EventoPrenotabile> getMatchList(String detail) {
 
         try {
             JSONArray jsonArray = new JSONArray(detail);
-            alCustom = new ArrayList<Dialogpojo>();
+            alCustom = new ArrayList<EventoPrenotabile>();
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject jsonObject = jsonArray.optJSONObject(i);
 
-                Dialogpojo pojo = new Dialogpojo();
+                EventoPrenotabile pojo = new EventoPrenotabile();
 
                 pojo.setTitles(jsonObject.optString("hnames"));
                 pojo.setSubjects(jsonObject.optString("hsubject"));

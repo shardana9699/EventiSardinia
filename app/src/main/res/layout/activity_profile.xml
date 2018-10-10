@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/ll_calendar">
 
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/row_adda"
             android:layout_width="match_parent"
@@ -26,8 +25,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_tendina"
-        app:menu="@menu/activity_tendina_drawer" >
+        app:menu="@menu/tendina" >
 
     </android.support.design.widget.NavigationView>
 
