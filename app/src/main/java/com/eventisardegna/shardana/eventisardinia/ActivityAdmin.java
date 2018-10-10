@@ -138,17 +138,12 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
 
         //SCEGLI SFONDO
         if(view == scegliSfondo){
-            openFileChooser();
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(380,150)
+                    .start(this);
         }
 
-    }
-
-    private void openFileChooser(){
-        //INTENT PER SCEGLIERE IMMAGINE
-        Intent intent = new Intent ();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     private String getFileExtension(Uri uri){
@@ -168,18 +163,12 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
             luogo = (String) place.getName();
         }
         //VIENE ASSEGNATO IL LINK DELL'IMMAGINE
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-            mImageUri = data.getData();
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(380,150)
-                    .start(this);
-        }
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }
