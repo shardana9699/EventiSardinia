@@ -2,7 +2,9 @@ package com.eventisardegna.shardana.eventisardinia;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -26,15 +28,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -55,9 +66,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView nav_nome_utente;
     private TextView nav_email_utente;
     boolean doubleTap = false;
+    public Uri mImageUri;
+    public String image_url;
+    private UploadTask mUploadTask;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -84,6 +98,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if(user.getPhotoUrl() != null){
             Picasso.get().load(user.getPhotoUrl()).into(nav_profile_image);
         }
+        nav_profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(60,60)
+                        .start(ProfileActivity.this);
+            }
+        });
         nav_nome_utente = (TextView) navView.findViewById(R.id.tendina_nome);
         nav_nome_utente.setText(user.getDisplayName());
         nav_email_utente = (TextView) navView.findViewById(R.id.tendina_email);
@@ -371,6 +394,74 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //VENGONO ASSEGNATI I VALORI DEL LUOGO
+        //VIENE ASSEGNATO IL LINK DELL'IMMAGINE
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
+                uploadImageToFirebaseStorage();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+    private void uploadImageToFirebaseStorage() {
+        //StorageReference profileImageRef = FirebaseStorage.getInstance().getReference("immaginiprofilo/"+System.currentTimeMillis()+ ".jpg");
+
+        final StorageReference profileImageRef = FirebaseStorage.getInstance().getReference("immaginiprofilo/" + System.currentTimeMillis() + ".jpg");
+
+        //CARICAMENTO EVENTO
+        if (mImageUri != null) {
+
+            mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
+            Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    // Continue with the task to get the download URL
+                    return profileImageRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult(); //LINK SFONDO
+                        image_url = downloadUri.toString();
+                        saveInformation();
+                        //VENGONO CARICATI TUTTI I CAMPI DELL'EVENTO
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
+        }
+    }
+    private void saveInformation(){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null && image_url != null) {
+            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(image_url)).build();
+            user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if(user.getPhotoUrl() != null){
+                            Picasso.get().load(user.getPhotoUrl()).into(nav_profile_image);
+                        }
+                    }
+                }
+            });
+        }
     }
 
 
