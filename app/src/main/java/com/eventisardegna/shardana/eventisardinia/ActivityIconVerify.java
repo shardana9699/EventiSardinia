@@ -125,7 +125,7 @@ public class ActivityIconVerify extends AppCompatActivity {
             mImageUri = data.getData();
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(70,70)
                     .start(this);
         }
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
