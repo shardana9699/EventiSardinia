@@ -58,7 +58,7 @@ class AdaptCalendario extends BaseAdapter {
         this.context = context;
         month.set(GregorianCalendar.DAY_OF_MONTH, 1);
         this.items = new ArrayList<String>();
-        df = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
+        df = new SimpleDateFormat("dd-MM-yyyy", Locale.ITALY);
         curentDateString = df.format(selectedDate.getTime());
         refreshDays();
 
@@ -92,12 +92,13 @@ class AdaptCalendario extends BaseAdapter {
         String[] separatedTime = day_string.get(position).split("-");
 
 
-        gridvalue = separatedTime[2].replaceFirst("^0*", "");
-        if ((Integer.parseInt(gridvalue) > 1) && (position < firstDay-1)) {
+        gridvalue = separatedTime[0].replaceFirst("^0*", "");
+        if ((Integer.parseInt(gridvalue) > 10) && (position < firstDay+2)) {
             dayView.setTextColor(Color.parseColor("#A9A9A9"));
+
             dayView.setClickable(false);
             dayView.setFocusable(false);
-        } else if ((Integer.parseInt(gridvalue) < 7) && (position > 28)) {
+        } else if ((Integer.parseInt(gridvalue) <= 10) && (position >= 28)) {
             dayView.setTextColor(Color.parseColor("#A9A9A9"));
             dayView.setClickable(false);
             dayView.setFocusable(false);
