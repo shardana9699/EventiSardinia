@@ -2,6 +2,7 @@ package com.eventisardegna.shardana.eventisardinia;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView nav_profile_image;
     private TextView nav_nome_utente;
     private TextView nav_email_utente;
+    boolean doubleTap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,7 +248,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         testo_mese.setText(android.text.format.DateFormat.format("MMMM yyyy", mese_calendario));
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -254,7 +257,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             super.onBackPressed();
         }
     }
-
+*/
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -271,7 +274,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    @Override
+    public void onBackPressed() {
+        if(doubleTap){
+            super.onBackPressed();
+        }else{
+            Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
+            doubleTap = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleTap = false;
+                }
+            },2000);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar, menu);
@@ -354,5 +372,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

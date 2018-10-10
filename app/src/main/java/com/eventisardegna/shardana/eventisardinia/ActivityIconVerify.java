@@ -3,6 +3,7 @@ package com.eventisardegna.shardana.eventisardinia;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
@@ -44,6 +45,8 @@ public class ActivityIconVerify extends AppCompatActivity {
     private Uri mImageUri;
     public String image_url;
     private UploadTask mUploadTask;
+    Boolean doubleTap = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +186,18 @@ public class ActivityIconVerify extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(),ActivityLogin.class));
+        if(doubleTap){
+            super.onBackPressed();
+        }else{
+            Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
+            doubleTap = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleTap = false;
+                }
+            },2000);
+        }
     }
 }
