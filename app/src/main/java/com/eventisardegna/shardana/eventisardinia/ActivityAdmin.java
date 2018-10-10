@@ -1,17 +1,27 @@
 package com.eventisardegna.shardana.eventisardinia;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.eventisardegna.shardana.eventisardinia.Model.MyResponse;
+import com.eventisardegna.shardana.eventisardinia.Model.Notification;
+import com.eventisardegna.shardana.eventisardinia.Model.Sender;
+import com.eventisardegna.shardana.eventisardinia.Remote.APIService;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
@@ -23,11 +33,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityAdmin extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,11 +64,19 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
     private StorageReference mStorageRef;
     private UploadTask mUploadTask;
 
+    APIService mService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi_evento);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Common.currentToken = FirebaseInstanceId.getInstance().getToken();
+
+        FirebaseMessaging.getInstance().subscribeToTopic("MyTopic");
+
+        mService = Common.getFCMClient();
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -106,6 +131,20 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
+        Notification notification = new Notification(titolo, descrizione);
+        Sender sender = new Sender("/topics/MyTopics", notification);
+        mService.sendNotification(sender)
+                .enqueue(new Callback<MyResponse>() {
+                    @Override
+                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                    }
+                });
 
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
