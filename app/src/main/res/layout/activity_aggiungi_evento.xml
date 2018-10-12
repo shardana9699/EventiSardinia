@@ -63,10 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="@string/invia" />
-
-
+            android:text="@string/invia"
+            android:onClick="Invia"/>
     </LinearLayout>
-
 
 </android.support.constraint.ConstraintLayout>

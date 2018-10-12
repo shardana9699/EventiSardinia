@@ -77,8 +77,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Common.currentToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("MY TOKEN", Common.currentToken);
 
 
         firebaseAuth = FirebaseAuth.getInstance();

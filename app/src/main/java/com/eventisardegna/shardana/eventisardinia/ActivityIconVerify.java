@@ -74,10 +74,7 @@ public class ActivityIconVerify extends AppCompatActivity {
         button_inserisci_profilo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAspectRatio(380,150)
-                        .start(ActivityIconVerify.this);
+                openFileChooser();
             }
         });
         button_verifica.setOnClickListener(new View.OnClickListener() {
@@ -111,17 +108,31 @@ public class ActivityIconVerify extends AppCompatActivity {
         });
 
     }
+    private void openFileChooser(){
+        //INTENT PER SCEGLIERE IMMAGINE
+        Intent intent = new Intent ();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleziona immagine profilo"), CHOOSE_IMAGE);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         //VIENE ASSEGNATO IL LINK DELL'IMMAGINE
+        if(requestCode == CHOOSE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null){
+            mImageUri = data.getData();
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .start(this);
+        }
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
             }
         }
 
