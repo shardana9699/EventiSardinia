@@ -137,11 +137,7 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
                 .enqueue(new Callback<MyResponse>() {
                     @Override
                     public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                    if(response.body().success == 1){
-                        Toast.makeText(ActivityAdmin.this, "Success", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(ActivityAdmin.this, "Failed", Toast.LENGTH_SHORT).show();
-                    }
+
                     }
 
                     @Override

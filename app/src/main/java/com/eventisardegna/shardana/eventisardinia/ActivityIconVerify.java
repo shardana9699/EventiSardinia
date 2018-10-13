@@ -201,7 +201,7 @@ public class ActivityIconVerify extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(doubleTap){
-            super.onBackPressed();
+            startActivity(new Intent(getApplicationContext(), ActivityIconVerify.class));
         }else{
             Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
             doubleTap = true;
