@@ -40,9 +40,9 @@ public class AdaptSfondo extends RecyclerView.Adapter<AdaptSfondo.ImageViewHolde
     public void onBindViewHolder(ImageViewHolder holder, int position) {
         EventoPrenotabile evento = mEventi.get(position);
 
-        holder.tvSubject.setText(evento.getSubjects());
-        holder.tvDescription.setText(evento.getDescripts());
-        Picasso.get().load(evento.getImage()).into(holder.ivImmagine);
+        holder.tvSubject.setText(evento.getLuogo());
+        holder.tvDescription.setText(evento.getDescrizione());
+        Picasso.get().load(evento.getImmagine()).into(holder.ivImmagine);
 
     }
 

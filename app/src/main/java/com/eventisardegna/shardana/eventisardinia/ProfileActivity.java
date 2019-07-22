@@ -146,14 +146,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //mUploads = new ArrayList<>();
-        FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento>(
-                        EventoCliccabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
+        FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
+                        EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
                 ) {
                     @Override
-                    protected void populateViewHolder(AdaptEvento viewHolder, EventoCliccabile model, int position) {
+                    protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
 
-                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
+                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
                     }
 
                     @Override
@@ -168,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 String mTitolo = getItem(position).getTitolo();
                                 String mLuogo = getItem(position).getLuogo();
                                 String mDescrizione = getItem(position).getDescrizione();
-                                String mImage = getItem(position).getmImageUrl();
+                                String mImage = getItem(position).getImmagine();
                                 Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
                                 intent.putExtra("title", mTitolo);
                                 intent.putExtra("description", mLuogo);
@@ -206,14 +206,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
         Query firebaseSearchQuery = mRef.orderByChild("luogo").startAt(query).endAt(query + "\uf0ff");
 
-        FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento>(
-                        EventoCliccabile.class, R.layout.addapt_evento, AdaptEvento.class,firebaseSearchQuery
+        FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
+                        EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class,firebaseSearchQuery
                 ) {
                     @Override
-                    protected void populateViewHolder(AdaptEvento viewHolder, EventoCliccabile model, int position) {
+                    protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
 
-                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getmImageUrl());
+                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
                     }
 
                     @Override
@@ -228,7 +228,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 String mTitolo = getItem(position).getTitolo();
                                 String mLuogo = getItem(position).getLuogo();
                                 String mDescrizione = getItem(position).getDescrizione();
-                                String mImage = getItem(position).getmImageUrl();
+                                String mImage = getItem(position).getImmagine();
                                 Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
                                 intent.putExtra("title", mTitolo);
                                 intent.putExtra("description", mLuogo);
