@@ -69,6 +69,17 @@ public class ActivityIconVerify extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFileChooser();
+                saveInformation();
+                /*
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    if(user.isEmailVerified()){
+                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                    }
+                    else{
+                        Toast.makeText(ActivityIconVerify.this, "Non hai ancora verificato la Email", Toast.LENGTH_SHORT).show();
+                    }
+                }*/
             }
         });
         button_verifica.setOnClickListener(new View.OnClickListener() {
@@ -85,13 +96,16 @@ public class ActivityIconVerify extends AppCompatActivity {
                 }
             }
         });
-        button_inizia.setOnClickListener(new View.OnClickListener() {
+       button_inizia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveInformation();
+
+                startActivity(getIntent());
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
                     if(user.isEmailVerified()){
+
                         startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
                     }
                     else{
@@ -195,7 +209,8 @@ public class ActivityIconVerify extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(doubleTap){
-            startActivity(new Intent(getApplicationContext(), ActivityIconVerify.class));
+
+            startActivity(new Intent(getApplicationContext(), ActivityLogin.class));
         }else{
             Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
             doubleTap = true;

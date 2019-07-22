@@ -57,7 +57,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private AdaptCalendario adaptCalendario;
     private TextView testo_mese;
     ActionBarDrawerToggle toggle;
-    private List<EventoPrenotabile> mUploads;
     private RecyclerView mRecyclerView;
     ImageView immagineProfilo;
     DrawerLayout drawer;
@@ -81,13 +80,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null){
+        /*if(user != null){
             if(user.isEmailVerified()) {
 
             }else{
                 startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
             }
-        }
+        }*/
         //GESTIONE ACTION BAR
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -146,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mUploads = new ArrayList<>();
+        //mUploads = new ArrayList<>();
         FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento> FirebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<EventoCliccabile, AdaptEvento>(
                         EventoCliccabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
@@ -302,22 +301,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    @Override
-    public void onBackPressed() {
-        if(doubleTap){
-            super.onBackPressed();
-        }else{
-            Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
-            doubleTap = true;
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleTap = false;
-                }
-            },2000);
-        }
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar, menu);
@@ -468,6 +452,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
     }
+    @Override
+    public void onBackPressed() {
+        if(doubleTap){
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }else{
+            Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
+            doubleTap = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleTap = false;
+                }
+            },1000);
+        }
+    }
+
 
 
 

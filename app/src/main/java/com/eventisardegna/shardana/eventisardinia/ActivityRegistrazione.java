@@ -85,6 +85,15 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
                 if(task.isSuccessful()){
                         //Attivita del profilo
                         saveUserInformation();
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if(user != null){
+                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(ActivityRegistrazione.this, "Email di Verifica Inviata", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                         finish();
                         startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
                 }else{
@@ -125,6 +134,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         if(view == buttonRegister){
             registerUser();
+
         }
 
         if(view == textViewSignIn){

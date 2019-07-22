@@ -26,13 +26,13 @@ public class ActivityDettagliEvento extends AppCompatActivity {
         foto = findViewById(R.id.foto_dettagli_evento);
 
         String title = getIntent().getStringExtra("title");
+        String place = getIntent().getStringExtra("place");
         String description = getIntent().getStringExtra("description");
-        String descrizion = getIntent().getStringExtra("descrizione");
         String image = getIntent().getStringExtra("image");
 
         titolo.setText(title);
-        luogo.setText(description);
-        descrizione.setText(descrizion);
+        luogo.setText(place);
+        descrizione.setText(description);
         Picasso.get().load(image).into(foto);
     }
 
