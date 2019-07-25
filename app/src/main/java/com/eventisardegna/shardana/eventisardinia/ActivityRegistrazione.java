@@ -39,6 +39,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+    private String tipoUtente="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +85,16 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
     }
 
     private void registerUser(){
-        String email = editTextEmail.getText().toString().trim();
+        String email;
+        if(tipoUtente == "Utente"){
+            email = editTextEmail.getText().toString().trim();
+        }
+        else{
+            email = editTextPec.getText().toString().trim();
+        }
         String password = editTextPassword.getText().toString().trim();
 
-        if(TextUtils.isEmpty(email)){
+        if(TextUtils.isEmpty(email) && TextUtils.isEmpty(email)){
             Toast.makeText(this,"Inserisci l'email",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -101,55 +108,106 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         progressDialog.show();
 
         //creazione nuovo utente
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+
+            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
                         //Attivita del profilo
                         saveUserInformation();
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    if(user != null){
-                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(ActivityRegistrazione.this, "Email di Verifica Inviata", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null) {
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(ActivityRegistrazione.this, "Email di Verifica Inviata", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                         finish();
-                        startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
-                }else{
-                    Toast.makeText(ActivityRegistrazione.this,"Errore nella registrazione,Riprova",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), ActivityIconVerify.class));
+                    } else {
+                        Toast.makeText(ActivityRegistrazione.this, "Errore nella registrazione,Riprova", Toast.LENGTH_SHORT).show();
+                    }
+                    progressDialog.dismiss();
                 }
-                progressDialog.dismiss();
-            }
-        });
+            });
 
 
     }
 
-    private void saveUserInformation(){
-        String name = editTextName.getText().toString().trim();
-        String cognome = editTextCognome.getText().toString().trim();
-        String phone = editTextPhone.getText().toString().trim();
-        DatabaseUtente databaseUtente = new DatabaseUtente(name, cognome, phone);
+    private void saveUserInformation() {
+        if (tipoUtente.equals( "Utente")) {
+            String name = editTextName.getText().toString().trim();
+            String cognome = editTextCognome.getText().toString().trim();
+            String email = editTextEmail.getText().toString().trim();
+            DatabaseUtente databaseUtente = new DatabaseUtente(name, cognome, email);
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null) {
-            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name + " " + cognome).build();
-            user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name + " " + cognome).build();
+                user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
 
+                        }
                     }
-                }
-            });
+                });
+            }
+            databaseReference.child("UserID").child("Utenti").child(name + " " + cognome).setValue(databaseUtente);
+            Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
         }
+        if (tipoUtente.equals( "Espositore")) {
+            String name = editTextName.getText().toString().trim();
+            String cognome = editTextCognome.getText().toString().trim();
+            String pec = editTextPec.getText().toString().trim();
+            String phone = editTextPhone.getText().toString().trim();
+            String data = editTextData.getText().toString().trim();
+            String luogo = editTextLuogo.getText().toString().trim();
+            String residenza = editTextResidenza.getText().toString().trim();
+            DatabaseUtente databaseUtente = new DatabaseUtente(name, cognome, pec, phone, data, luogo, residenza);
 
-        databaseReference.child("UserID").child(name + " " + cognome).setValue(databaseUtente);
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name + " " + cognome).build();
+                user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
 
-        Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+            databaseReference.child("UserID").child("Espositori").child(name + " " + cognome).setValue(databaseUtente);
+            Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
+        }
+        if (tipoUtente.equals( "Organizzatore")) {
+            String name = editTextName.getText().toString().trim();
+            String cognome = editTextCognome.getText().toString().trim();
+            String pec = editTextPec.getText().toString().trim();
+            //String phone = editTextPhone.getText().toString().trim();
+            String data = editTextData.getText().toString().trim();
+            String luogo = editTextLuogo.getText().toString().trim();
+            String residenza = editTextResidenza.getText().toString().trim();
+            DatabaseUtente databaseUtente = new DatabaseUtente(name, cognome, pec, data, luogo, residenza);
+
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name + " " + cognome).build();
+                user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                        }
+                    }
+                });
+            }
+            databaseReference.child("UserID").child("Organizzatori").child(name + " " + cognome).setValue(databaseUtente);
+            Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -178,6 +236,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
                 editTextData.setVisibility(View.GONE);
                 editTextLuogo.setVisibility(View.GONE);
                 editTextResidenza.setVisibility(View.GONE);
+                tipoUtente = "Utente";
                 break;
             case "Espositore":
                 editTextEmail.setVisibility(View.GONE);
@@ -187,6 +246,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
                 editTextData.setVisibility(View.VISIBLE);
                 editTextLuogo.setVisibility(View.VISIBLE);
                 editTextResidenza.setVisibility(View.VISIBLE);
+                tipoUtente = "Espositore";
                 break;
             case "Organizzatore":
                 editTextEmail.setVisibility(View.GONE);
@@ -196,6 +256,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
                 editTextData.setVisibility(View.VISIBLE);
                 editTextLuogo.setVisibility(View.VISIBLE);
                 editTextResidenza.setVisibility(View.VISIBLE);
+                tipoUtente = "Organizzatore";
                 break;
         }
 

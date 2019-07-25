@@ -24,6 +24,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
     Activity activity;
 
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference2;
     private FirebaseAuth firebaseAuth;
     private Activity context;
     private ArrayList<EventoPrenotabile> alCustom;
@@ -59,7 +60,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
+        databaseReference2 = FirebaseDatabase.getInstance().getReference();
             LayoutInflater inflater = context.getLayoutInflater();
             final View listViewItem = inflater.inflate(R.layout.addapt_prenotazione, null, true);
 
@@ -68,6 +69,56 @@ class AdaptEventoPrenotabile extends BaseAdapter {
             final Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
 
             final FirebaseUser user = firebaseAuth.getCurrentUser();
+            databaseReference2.child("UserID").child("Utenti").addValueEventListener(new ValueEventListener() {
+
+                /**
+                 * * This method will be invoked any time the data on the database changes.
+                 * Additionally, it will be invoked as soon as we connect the listener, so that we can get an initial snapshot of the data on the database.
+                 *
+                 * @param dataSnapshot
+                 */
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // get all of the children at this level.
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    // shake hands with each of them.'
+                    for (DataSnapshot child : children) {
+                        String email = (String) dataSnapshot.getValue().toString().trim();
+                        if (email.contains(user.getEmail())) {
+                            prenota.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        databaseReference2.child("UserID").child("Organizzatori").addValueEventListener(new ValueEventListener() {
+
+            /**
+             * * This method will be invoked any time the data on the database changes.
+             * Additionally, it will be invoked as soon as we connect the listener, so that we can get an initial snapshot of the data on the database.
+             *
+             * @param dataSnapshot
+             */
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // get all of the children at this level.
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                // shake hands with each of them.'
+                for (DataSnapshot child : children) {
+                    String email = (String) dataSnapshot.getValue().toString().trim();
+                    if (email.contains(user.getEmail())) {
+                        prenota.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         databaseReference.child("Eventi").child(alCustom.get(position).getLuogo()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
 
@@ -84,6 +135,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
                 for (DataSnapshot child : children) {
                     String name = (String) dataSnapshot.getValue().toString().trim();
                     if(name.contains(user.getUid())){
+
                         prenota.setEnabled(false);
                     }
                 }
