@@ -25,10 +25,14 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class ActivityRegistrazione extends AppCompatActivity implements View.OnClickListener {
+public class ActivityRegistrazione extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Button buttonRegister;
     private EditText editTextEmail;
+    private EditText editTextPec;
+    private EditText editTextData;
+    private EditText editTextLuogo;
+    private EditText editTextResidenza;
     private EditText editTextPassword;
     private TextView textViewSignIn;
     private EditText editTextName,editTextCognome, editTextPhone;
@@ -41,6 +45,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrazione);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser() != null){
@@ -52,12 +57,16 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         databaseReference = FirebaseDatabase.getInstance().getReference();
         editTextName = (EditText) findViewById(R.id.editTextName);
         editTextCognome = (EditText) findViewById(R.id.editTextCognome);
-        editTextPhone = (EditText) findViewById(R.id.editTextPhone);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextPec = (EditText) findViewById(R.id.pec);
+        editTextData = (EditText) findViewById(R.id.editTextData);
+        editTextPhone = (EditText) findViewById(R.id.editTextPhone);
+        editTextLuogo = (EditText) findViewById(R.id.editTextLuogo);
+        editTextResidenza = (EditText) findViewById(R.id.editTextResidenza);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         textViewSignIn = (TextView) findViewById(R.id.textViewSignIn);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.array_nuovoUtente, android.R.layout.simple_spinner_item);
@@ -65,6 +74,9 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
         progressDialog = new ProgressDialog(this);
 
         buttonRegister.setOnClickListener(this);
@@ -152,11 +164,46 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
             startActivity(new Intent(this,ActivityLogin.class));
         }
     }
-    public void b1Clicked(View v){
 
-            editTextEmail.setVisibility(View.VISIBLE);
-            editTextPassword.setVisibility(View.VISIBLE);
-            editTextPhone.setVisibility(View.VISIBLE);
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition(position).toString();
+
+        switch (text) {
+            case "Utente":
+                editTextEmail.setVisibility(View.VISIBLE);
+                editTextPassword.setVisibility(View.VISIBLE);
+                editTextPec.setVisibility(View.GONE);
+                editTextPhone.setVisibility(View.GONE);
+                editTextData.setVisibility(View.GONE);
+                editTextLuogo.setVisibility(View.GONE);
+                editTextResidenza.setVisibility(View.GONE);
+                break;
+            case "Espositore":
+                editTextEmail.setVisibility(View.GONE);
+                editTextPec.setVisibility(View.VISIBLE);
+                editTextPassword.setVisibility(View.VISIBLE);
+                editTextPhone.setVisibility(View.VISIBLE);
+                editTextData.setVisibility(View.VISIBLE);
+                editTextLuogo.setVisibility(View.VISIBLE);
+                editTextResidenza.setVisibility(View.VISIBLE);
+                break;
+            case "Organizzatore":
+                editTextEmail.setVisibility(View.GONE);
+                editTextPec.setVisibility(View.VISIBLE);
+                editTextPassword.setVisibility(View.VISIBLE);
+                editTextPhone.setVisibility(View.VISIBLE);
+                editTextData.setVisibility(View.VISIBLE);
+                editTextLuogo.setVisibility(View.VISIBLE);
+                editTextResidenza.setVisibility(View.VISIBLE);
+                break;
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }
+

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,6 +10,8 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:isScrollContainer="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,17 +23,17 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="center_horizontal"
             android:text="Registazione Utente"
-            android:layout_gravity="center_horizontal"/>
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:layout_margin="15dp"
-            android:inputType="textPersonName"
-            android:hint="@string/nome"
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/nome"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/editTextCognome"
@@ -39,25 +41,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:hint="@string/cognome"
-            android:inputType="textPersonName"
-             />
+            android:inputType="textPersonName" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinner1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            />
+            android:layout_margin="15dp" />
 
-        <EditText
-            android:layout_margin="15dp"
-            android:inputType="phone"
-            android:hint="@string/telefono"
-            android:id="@+id/editTextPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
 
         <EditText
             android:id="@+id/editTextEmail"
@@ -66,29 +57,76 @@
             android:layout_margin="15dp"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <EditText
+            android:id="@+id/pec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:inputType="textPassword"
-            android:hint="@string/password"
+            android:hint="Pec"
+            android:inputType="textEmailAddress"
+            android:visibility="gone" />
+
+        <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_margin="15dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:visibility="gone" />
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/telefono"
+            android:inputType="phone"
+            android:visibility="gone" />
+
+
+        <EditText
+            android:id="@+id/editTextData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Data di nascita"
+            android:inputType="date"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/editTextLuogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Luogo di nascita"
+            android:inputType="text"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/editTextResidenza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Residenza"
+            android:inputType="text"
+            android:visibility="gone" />
 
         <Button
-            android:layout_margin="15dp"
             android:id="@+id/buttonRegister"
-            android:text="Registrati"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Registrati" />
+
         <TextView
 
-            android:textAlignment="center"
-            android:text="Già registrato? Premi qui"
             android:id="@+id/textViewSignIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="38dp"
+            android:text="Già registrato? Premi qui"
+            android:textAlignment="center" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
