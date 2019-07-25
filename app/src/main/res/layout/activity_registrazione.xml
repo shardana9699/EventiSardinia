@@ -40,13 +40,14 @@
             android:layout_margin="15dp"
             android:hint="@string/cognome"
             android:inputType="textPersonName"
-            android:onClick="b1Clicked" />
+             />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"/>
+            android:layout_margin="15dp"
+            />
 
         <EditText
             android:layout_margin="15dp"

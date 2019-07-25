@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
+        String text= parent.getItemAtPosition(pos).toString();
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
     }
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
         // Another interface callback
 
     }
+
 
 
 }
