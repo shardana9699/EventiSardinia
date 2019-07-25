@@ -1,7 +1,10 @@
 package com.eventisardegna.shardana.eventisardinia;
 
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -11,7 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eventisardegna.shardana.eventisardinia.Model.MyResponse;
@@ -36,6 +41,8 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.Calendar;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,6 +64,10 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
     private Uri mImageUri;
     private StorageReference mStorageRef;
     private UploadTask mUploadTask;
+    private TextView boxData;
+    private String data2;
+    private static final String TAG = "ActivityAdmin";
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     APIService mService;
 
@@ -66,22 +77,64 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_aggiungi_evento);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        //Viene ottenuto il token tramite l'id dell'utente loggato
         Common.currentToken = FirebaseInstanceId.getInstance().getToken();
-
         FirebaseMessaging.getInstance().subscribeToTopic("MyTopic");
-
         mService = Common.getFCMClient();
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        editDate = (EditText) findViewById(R.id.editDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(); //carica database
+        boxData = (TextView) findViewById(R.id.editDate);
         editTitolo = (EditText) findViewById(R.id.editTitolo);
         editDescrizione = (EditText) findViewById(R.id.editDescrizione);
         buttonEvent = (Button) findViewById(R.id.buttonEvent);
         getPlace = (Button) findViewById(R.id.getPlace);
         scegliSfondo = (Button) findViewById(R.id.sfondo);
+        boxData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+                DatePickerDialog dialog = new DatePickerDialog(
+                        ActivityAdmin.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                //Log.d(TAG, "onDateSet: dd/mm/yyyy: " + month + "-" + day + "-" + year);
+                String date;
+                if(month>9 && day > 9) {
+                    date = day + "-" + month + "-" + year;
+                    data2 = date;
+                }else if(month > 9 && day < 10){
+
+                    date = day + "-" + month + "-" + year;
+                    data2 = "0"+day + "-" + month + "-" + year;
+                }
+                else if(month < 10 && day > 9){
+                    date = day + "-" + month + "-" + year;
+                    data2 = day + "-" + "0"+ month + "-" + year;
+                }else{
+                    date = day + "-" + month + "-" + year;
+                    data2 = "0"+day + "-" + "0"+ month + "-" + year;
+                }
+
+                boxData.setText(date);
+
+
+            }
+        };
+        mStorageRef = FirebaseStorage.getInstance().getReference(); //caricamento file dal database
 
         buttonEvent.setOnClickListener(this);
         getPlace.setOnClickListener(this);
@@ -90,7 +143,9 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
     }
 
     private void admin(){
-        final String date = editDate.getText().toString().trim();
+
+        //viene assegnato il testo inserito dall'admin
+        //final String date = editDate.getText().toString().trim();
         final String titolo = editTitolo.getText().toString().trim();
         final String descrizione = editDescrizione.getText().toString().trim();
 
@@ -116,7 +171,7 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult(); //LINK SFONDO
                         //VENGONO CARICATI TUTTI I CAMPI DELL'EVENTO
-                        DatabaseEvento upload = new DatabaseEvento(date, titolo, latitude, longitude, luogo.toLowerCase(), prenotazioni, downloadUri.toString(), descrizione);
+                        DatabaseEvento upload = new DatabaseEvento(data2, titolo, latitude, longitude, luogo.toLowerCase(), prenotazioni, downloadUri.toString(), descrizione);
                         databaseReference.child("Eventi").child(titolo).setValue(upload);
                     } else {
                         // Handle failures

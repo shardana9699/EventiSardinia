@@ -4,42 +4,43 @@ package com.eventisardegna.shardana.eventisardinia;
 import android.widget.Button;
 
 public class EventoPrenotabile {
-    private String titles;
-    private String subjects;
-    private String image;
-    private String descripts;
+    private String titolo;
+    private String luogo;
+    private String immagine;
+
+    private String descrizione;
     private Button prenota;
 
-    public String getImage() {
-        return image;
+    public String getTitolo() {
+        return titolo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
     }
 
-    public void setTitles(String titles) {
-        this.titles = titles;
+    public String getLuogo() {
+        return luogo;
     }
 
-    public void setSubjects(String subjects) {
-        this.subjects = subjects;
+    public void setLuogo(String luogo) {
+        this.luogo = luogo;
     }
 
-    public void setDescripts(String descripts) {
-        this.descripts = descripts;
+    public String getImmagine() {
+        return immagine;
     }
 
-    public String getTitles() {
-        return titles;
+    public void setImmagine(String immagine) {
+        this.immagine = immagine;
     }
 
-    public String getSubjects() {
-        return subjects;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public String getDescripts() {
-        return descripts;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public Button getPrenota() {

@@ -8,7 +8,7 @@ class DatabaseEvento {
     public Double latitude;
     public Double longitude;
     public String luogo="";
-    public String mImageUrl;
+    public String immagine;
     public String descrizione;
 
     public DatabaseEvento(){
@@ -16,14 +16,14 @@ class DatabaseEvento {
     }
 
     public static ArrayList<DatabaseEvento> date_collection_arr;
-    public DatabaseEvento(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String mImageUrl, String descrizione){
+    public DatabaseEvento(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String immagine, String descrizione){
 
         this.date=date;
         this.titolo=titolo;
         this.latitude=latitude;
         this.longitude=longitude;
         this.luogo = luogo;
-        this.mImageUrl = mImageUrl;
+        this.immagine = immagine;
         this.descrizione = descrizione;
     }
 
@@ -35,12 +35,12 @@ class DatabaseEvento {
         this.descrizione = descrizione;
     }
 
-    public String getmImageUrl() {
-        return mImageUrl;
+    public String getImmagine() {
+        return immagine;
     }
 
-    public void setmImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+    public void setImmagine(String mImageUrl) {
+        this.immagine = mImageUrl;
     }
 
     public String getLuogo() {

@@ -246,9 +246,9 @@ class AdaptCalendario extends BaseAdapter {
 
                 EventoPrenotabile pojo = new EventoPrenotabile();
 
-                pojo.setTitles(jsonObject.optString("hnames"));
-                pojo.setSubjects(jsonObject.optString("hsubject"));
-                pojo.setDescripts(jsonObject.optString("descript"));
+                pojo.setTitolo(jsonObject.optString("hnames"));
+                pojo.setLuogo(jsonObject.optString("hsubject"));
+                pojo.setDescrizione(jsonObject.optString("descript"));
 
                 alCustom.add(pojo);
 

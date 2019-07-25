@@ -67,6 +67,7 @@ public class ProfileAdmin extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
         button_map = (Button) findViewById(R.id.map);
         button_logout = (Button) findViewById(R.id.logout);
         button_aggiungi_evento = (Button)findViewById(R.id.addEvents);

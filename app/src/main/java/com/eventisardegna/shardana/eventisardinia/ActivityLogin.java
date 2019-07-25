@@ -37,10 +37,14 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+
         if(user != null){
-            //Attivita del profilo
-            finish();
-            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+            if(user.isEmailVerified()) {
+                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+            }else{
+                Toast.makeText(this,"L'account non è verificato: controlla la mail",Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);

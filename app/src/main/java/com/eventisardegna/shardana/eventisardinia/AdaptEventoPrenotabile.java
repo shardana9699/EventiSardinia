@@ -69,7 +69,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
 
             final FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Eventi").child(alCustom.get(position).getLuogo()).child("prenotazioni").addValueEventListener(new ValueEventListener() {
 
             /**
              * This method will be invoked any time the data on the database changes.
@@ -101,15 +101,15 @@ class AdaptEventoPrenotabile extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    databaseReference.child("Eventi").child(alCustom.get(position).getSubjects()).child("prenotazioni").push().setValue(user.getUid());
+                    databaseReference.child("Eventi").child(alCustom.get(position).getLuogo()).child("prenotazioni").push().setValue(user.getUid());
                     DatabaseEvento.date_collection_arr=new ArrayList<DatabaseEvento>();
                 }
 
 
             });
 
-            tvSubject.setText(alCustom.get(position).getSubjects());
-            tvDescription.setText(alCustom.get(position).getDescripts());
+            tvSubject.setText(alCustom.get(position).getLuogo());
+            tvDescription.setText(alCustom.get(position).getDescrizione());
 
         return  listViewItem;
     }
