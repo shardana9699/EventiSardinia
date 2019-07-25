@@ -32,13 +32,21 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <EditText
-            android:layout_margin="15dp"
-            android:inputType="textPersonName"
-            android:hint="@string/cognome"
             android:id="@+id/editTextCognome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/cognome"
+            android:inputType="textPersonName"
+            android:onClick="b1Clicked" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"/>
 
         <EditText
             android:layout_margin="15dp"
@@ -46,22 +54,26 @@
             android:hint="@string/telefono"
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
 
         <EditText
-            android:layout_margin="15dp"
-            android:inputType="textEmailAddress"
-            android:hint="@string/email"
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:visibility="gone"/>
         <EditText
             android:layout_margin="15dp"
             android:inputType="textPassword"
             android:hint="@string/password"
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <Button
             android:layout_margin="15dp"

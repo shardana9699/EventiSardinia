@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,14 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         textViewSignIn = (TextView) findViewById(R.id.textViewSignIn);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
-
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.array_nuovoUtente, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
 
         buttonRegister.setOnClickListener(this);
@@ -130,6 +139,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
     }
 
+
     @Override
     public void onClick(View view) {
         if(view == buttonRegister){
@@ -140,5 +150,11 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         if(view == textViewSignIn){
             startActivity(new Intent(this,ActivityLogin.class));
         }
+    }
+    public void b1Clicked(View v){
+        editTextEmail.setVisibility(View.VISIBLE);
+        editTextPassword.setVisibility(View.VISIBLE);
+        editTextPhone.setVisibility(View.VISIBLE);
+
     }
 }
