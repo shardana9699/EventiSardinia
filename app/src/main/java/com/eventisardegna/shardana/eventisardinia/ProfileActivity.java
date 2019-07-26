@@ -80,13 +80,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        /*if(user != null){
+        if(user != null){
             if(user.isEmailVerified()) {
 
             }else{
                 startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
             }
-        }*/
+        }
         //GESTIONE ACTION BAR
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -290,6 +290,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
+        if(id == R.id.nav_my_account){
+            finish();
+            startActivity(new Intent(this, ActivityModificaProfilo.class));
+        }
 
         if(id == R.id.nav_logout){
             FirebaseAuth.getInstance().signOut();

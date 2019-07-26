@@ -77,6 +77,14 @@
             android:inputType="textPassword"
             android:visibility="gone" />
         <EditText
+            android:id="@+id/editTextConfPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Conferma Password"
+            android:inputType="textPassword"
+            android:visibility="gone" />
+        <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,6 +113,15 @@
             android:visibility="gone" />
 
         <EditText
+            android:id="@+id/editTextIndirizzo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Indirizzo"
+            android:inputType="text"
+            android:visibility="gone" />
+
+        <EditText
             android:id="@+id/editTextResidenza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,6 +129,38 @@
             android:hint="Residenza"
             android:inputType="text"
             android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/editTextCap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Cap"
+            android:inputType="number"
+            android:visibility="gone" />
+        <EditText
+            android:id="@+id/editTextCodiceAutorizzazione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Codice Autorizzazione"
+            android:inputType="number"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_carica_carta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Carica Carta Identità" />
+
+        <ImageView
+            android:id="@+id/immagine_carta_identita"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/baseline_person_black_48dp" />
 
         <Button
             android:id="@+id/buttonRegister"
