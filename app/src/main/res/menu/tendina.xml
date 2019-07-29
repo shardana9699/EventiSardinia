@@ -10,6 +10,10 @@
             android:icon="@drawable/baseline_person_black_48dp"
             android:title="Il Mio Account" />
         <item
+            android:id="@+id/nav_eventi_prenotati"
+            android:icon="@color/colorPrimaryDark"
+            android:title="Eventi Prenotati" />
+        <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/baseline_settings_black_48dp"
             android:title="Impostazioni" />

@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActivitySettingProfilo"></activity>
+        <activity android:name=".ActivityEventiPrenotati"></activity>
+        <activity android:name=".ActivitySettingProfilo" />
         <activity android:name=".ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,7 +63,7 @@
         <activity android:name=".ActivityDettagliEvento" />
         <activity android:name=".ActivityNavAccount" />
         <activity android:name=".ActivityModificaProfilo" />
-        <activity android:name=".ActivityIconVerify"></activity>
+        <activity android:name=".ActivityIconVerify" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
