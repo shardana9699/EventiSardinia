@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +59,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private String tipoUtente="";
-
+    private FirebaseStorage mStorage;
     private static final int CHOOSE_IMAGE = 101;
     private Uri mImageUri;
     private ImageView imageView;
@@ -385,6 +386,16 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
 
         //CARICAMENTO EVENTO
         if (mImageUri != null) {
+
+            mStorage = FirebaseStorage.getInstance();
+            final FirebaseUser user = firebaseAuth.getCurrentUser();
+            StorageReference imageRef = mStorage.getReferenceFromUrl(user.getPhotoUrl().toString());
+            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+            });
 
             mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
             Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {

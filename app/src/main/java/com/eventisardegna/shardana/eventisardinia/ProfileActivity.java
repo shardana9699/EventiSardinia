@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
@@ -68,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     boolean doubleTap = false;
     public Uri mImageUri;
     public String image_url;
+    private FirebaseStorage mStorage;
     private UploadTask mUploadTask;
 
     @Override
@@ -105,6 +108,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         nav_profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setAspectRatio(60,60)
@@ -412,6 +416,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         //CARICAMENTO EVENTO
         if (mImageUri != null) {
+
+            mStorage = FirebaseStorage.getInstance();
+            final FirebaseUser user = firebaseAuth.getCurrentUser();
+            StorageReference imageRef = mStorage.getReferenceFromUrl(user.getPhotoUrl().toString());
+            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+            });
 
             mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
             Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {

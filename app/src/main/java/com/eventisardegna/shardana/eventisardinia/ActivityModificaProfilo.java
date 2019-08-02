@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,6 +50,7 @@ public class ActivityModificaProfilo extends AppCompatActivity {
     private EditText email_utente;
     public String image_url;
     private UploadTask mUploadTask;
+    private FirebaseStorage mStorage;
     Boolean doubleTap = false;
 
     @Override
@@ -191,6 +193,15 @@ public class ActivityModificaProfilo extends AppCompatActivity {
 
         //CARICAMENTO EVENTO
         if (mImageUri != null) {
+            mStorage = FirebaseStorage.getInstance();
+            final FirebaseUser user = firebaseAuth.getCurrentUser();
+            StorageReference imageRef = mStorage.getReferenceFromUrl(user.getPhotoUrl().toString());
+            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+            });
 
             mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
             Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
