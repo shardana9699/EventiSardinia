@@ -69,6 +69,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
             final Button prenota = (Button) listViewItem.findViewById(R.id.prenota);
 
             final FirebaseUser user = firebaseAuth.getCurrentUser();
+
             databaseReference2.child("UserID").child("Utenti").addValueEventListener(new ValueEventListener() {
 
                 /**

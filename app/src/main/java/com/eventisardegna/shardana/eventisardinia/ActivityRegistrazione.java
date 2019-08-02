@@ -112,7 +112,10 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
         buttonCaricaCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                //openFileChooser();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(ActivityRegistrazione.this);
 
             }
         });

@@ -68,7 +68,11 @@ public class ActivityIconVerify extends AppCompatActivity {
         button_inserisci_profilo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                //openFileChooser();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(60,60)
+                        .start(ActivityIconVerify.this);
                 saveInformation();
                 /*
                 FirebaseUser user = firebaseAuth.getCurrentUser();

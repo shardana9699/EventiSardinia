@@ -94,7 +94,11 @@ public class ActivityModificaProfilo extends AppCompatActivity {
         button_modifica_immagine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                //openFileChooser();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(60,60)
+                        .start(ActivityModificaProfilo.this);
                 saveInformation();
                 /*
                 FirebaseUser user = firebaseAuth.getCurrentUser();
