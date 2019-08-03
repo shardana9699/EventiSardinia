@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -59,7 +60,7 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
 
 
         firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -97,11 +98,8 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
-                    String uid = (String) dataSnapshot.getValue().toString().trim();
-                    if(uid.equals(user.getUid())) {
-                        DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
-                        DatabaseEvento.date_collection_arr.add(databaseEvento);
-                    }
+                    DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
+                    DatabaseEvento.date_collection_arr.add(databaseEvento);
                 }
             }
 
@@ -115,52 +113,56 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //mUploads = new ArrayList<>();
-        FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
-                        EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
-                ) {
-                    @Override
-                    protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
+        String query = user.getUid();
 
-                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
-                    }
+        mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
+        Query firebaseSearchQuery = mRef.orderByChild("prenotazioni").startAt(query).endAt(query + "\uf0ff");
+        if(firebaseSearchQuery != null) {
+            //mUploads = new ArrayList<>();
+            FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
+                    new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
+                            EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class, firebaseSearchQuery
+                    ) {
+                        @Override
+                        protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
 
-                    @Override
-                    public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
+                            viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
+                        }
 
-                        AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
+                        @Override
+                        public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
 
-                        adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
-                            @Override
-                            public void OnItemClick(View view, int position) {
+                            AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
 
-                                String mTitolo = getItem(position).getTitolo();
-                                String mLuogo = getItem(position).getLuogo();
-                                String mDescrizione = getItem(position).getDescrizione();
-                                String mImage = getItem(position).getImmagine();
-                                Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
-                                intent.putExtra("title", mTitolo);
-                                intent.putExtra("description", mLuogo);
-                                intent.putExtra("descrizione", mDescrizione);
-                                intent.putExtra("image", mImage);
-                                startActivity(intent);
-                            }
+                            adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
+                                @Override
+                                public void OnItemClick(View view, int position) {
 
-                            @Override
-                            public void OnItemLongClick(View view, int position) {
+                                    String mTitolo = getItem(position).getTitolo();
+                                    String mLuogo = getItem(position).getLuogo();
+                                    String mDescrizione = getItem(position).getDescrizione();
+                                    String mImage = getItem(position).getImmagine();
+                                    Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
+                                    intent.putExtra("title", mTitolo);
+                                    intent.putExtra("description", mLuogo);
+                                    intent.putExtra("descrizione", mDescrizione);
+                                    intent.putExtra("image", mImage);
+                                    startActivity(intent);
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void OnItemLongClick(View view, int position) {
 
-                        return adaptEvento;
-                    }
-                };
+                                }
+                            });
+
+                            return adaptEvento;
+                        }
+                    };
 
 
-
-        mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
-
+            mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
+        }
     }
 
     @Override
