@@ -172,13 +172,6 @@ public class ActivityIconVerify extends AppCompatActivity {
 
             mStorage = FirebaseStorage.getInstance();
             final FirebaseUser user = firebaseAuth.getCurrentUser();
-            StorageReference imageRef = mStorage.getReferenceFromUrl(user.getPhotoUrl().toString());
-            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                }
-            });
 
             mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
             Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {

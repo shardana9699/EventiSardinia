@@ -113,10 +113,10 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String query = user.getUid();
+        String query = user.getEmail();
 
         mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
-        Query firebaseSearchQuery = mRef.orderByChild("prenotazioni").startAt(query).endAt(query + "\uf0ff");
+        Query firebaseSearchQuery = mRef.orderByChild("prenotazioni").equalTo(query);
         if(firebaseSearchQuery != null) {
             //mUploads = new ArrayList<>();
             FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =

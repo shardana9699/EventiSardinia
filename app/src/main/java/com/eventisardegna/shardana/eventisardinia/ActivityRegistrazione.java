@@ -266,6 +266,7 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
                     }
                 });
             }
+
             databaseReference.child("UserID").child("Organizzatori").child(name + " " + cognome).setValue(databaseUtente);
             Toast.makeText(this, "Informazioni Salvate", Toast.LENGTH_LONG).show();
         }
@@ -389,13 +390,6 @@ public class ActivityRegistrazione extends AppCompatActivity implements View.OnC
 
             mStorage = FirebaseStorage.getInstance();
             final FirebaseUser user = firebaseAuth.getCurrentUser();
-            StorageReference imageRef = mStorage.getReferenceFromUrl(user.getPhotoUrl().toString());
-            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                }
-            });
 
             mUploadTask = profileImageRef.putFile(mImageUri); //VIENE INSERITO IL FILE NELLO STORAGE
             Task<Uri> urlTask = mUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
