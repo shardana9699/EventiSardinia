@@ -59,7 +59,7 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
 
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        final FirebaseUser user = firebaseAuth.getCurrentUser();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -97,8 +97,11 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
-                    DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
-                    DatabaseEvento.date_collection_arr.add(databaseEvento);
+                    String uid = (String) dataSnapshot.getValue().toString().trim();
+                    if(uid.equals(user.getUid())) {
+                        DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
+                        DatabaseEvento.date_collection_arr.add(databaseEvento);
+                    }
                 }
             }
 

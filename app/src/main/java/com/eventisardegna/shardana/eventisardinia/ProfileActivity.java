@@ -299,6 +299,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             finish();
             startActivity(new Intent(this, ActivityModificaProfilo.class));
         }
+        if(id == R.id.nav_eventi_prenotati){
+            finish();
+            startActivity(new Intent(this, ActivityEventiPrenotati.class));
+        }
 
         if(id == R.id.nav_logout){
             FirebaseAuth.getInstance().signOut();
