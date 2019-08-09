@@ -157,9 +157,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                removeData(dataSnapshot);
             }
 
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             public void onCancelled(DatabaseError databaseError) {
@@ -208,11 +210,29 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     public void loadData(DataSnapshot dataSnapshot) {
         // get all of the children at this level.
+        int flag = 0;
+        DatabaseEvento doc = dataSnapshot.getValue(DatabaseEvento.class);
+        DatabaseEvento eve = dataSnapshot.getValue(DatabaseEvento.class);
+        for(DatabaseEvento eventi: eventi){
+            if(eventi.getTitolo().equals(doc.getTitolo())){
+                flag = 1;
+            }
+        }
+        if(flag == 0) {
+            DatabaseEvento.date_collection_arr.add(eve);
+            eventi.add(doc);
+        }
+
+        adapter = new AdaptEvento(ProfileActivity.this, eventi);
+        listaEventiView.setAdapter(adapter);
+    }
+    public void removeData(DataSnapshot dataSnapshot) {
+        // get all of the children at this level.
 
         DatabaseEvento doc = dataSnapshot.getValue(DatabaseEvento.class);
         DatabaseEvento eve = dataSnapshot.getValue(DatabaseEvento.class);
-        DatabaseEvento.date_collection_arr.add(eve);
-        eventi.add(doc);
+        DatabaseEvento.date_collection_arr.remove(eve);
+        eventi.remove(doc);
 
         adapter = new AdaptEvento(ProfileActivity.this, eventi);
         listaEventiView.setAdapter(adapter);
