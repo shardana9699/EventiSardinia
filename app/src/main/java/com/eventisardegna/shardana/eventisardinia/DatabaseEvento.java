@@ -1,6 +1,7 @@
 package com.eventisardegna.shardana.eventisardinia;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class DatabaseEvento {
     public String date="";
@@ -10,13 +11,14 @@ class DatabaseEvento {
     public String luogo="";
     public String immagine;
     public String descrizione;
+    public HashMap<String, String> prenotazioni;
 
     public DatabaseEvento(){
 
     }
 
     public static ArrayList<DatabaseEvento> date_collection_arr;
-    public DatabaseEvento(String date, String titolo, Double latitude, Double longitude, String luogo, String prenotazioni, String immagine, String descrizione){
+    public DatabaseEvento(String date, String titolo, Double latitude, Double longitude, String luogo, HashMap<String,String> prenotazioni, String immagine, String descrizione){
 
         this.date=date;
         this.titolo=titolo;
@@ -25,6 +27,7 @@ class DatabaseEvento {
         this.luogo = luogo;
         this.immagine = immagine;
         this.descrizione = descrizione;
+        this.prenotazioni = prenotazioni;
     }
 
     public String getDescrizione() {
@@ -89,5 +92,12 @@ class DatabaseEvento {
 
     public static void setDate_collection_arr(ArrayList<DatabaseEvento> date_collection_arr) {
         DatabaseEvento.date_collection_arr = date_collection_arr;
+    }
+    public HashMap<String, String> getPrenotazioni() {
+        return prenotazioni;
+    }
+
+    public void setPrenotazioni(HashMap<String, String> prenotazioni) {
+        this.prenotazioni = prenotazioni;
     }
 }

@@ -3,6 +3,8 @@ package com.eventisardegna.shardana.eventisardinia;
 
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class EventoPrenotabile {
     private String titolo;
     private String luogo;
@@ -10,6 +12,9 @@ public class EventoPrenotabile {
 
     private String descrizione;
     private Button prenota;
+
+
+    public static ArrayList<EventoPrenotabile> date_collection_arr;
 
     public String getTitolo() {
         return titolo;
@@ -49,5 +54,8 @@ public class EventoPrenotabile {
 
     public void setPrenota(Button prenota) {
         this.prenota = prenota;
+    }
+    public static void setDate_collection_arr(ArrayList<EventoPrenotabile> date_collection_arr) {
+        EventoPrenotabile.date_collection_arr = date_collection_arr;
     }
 }

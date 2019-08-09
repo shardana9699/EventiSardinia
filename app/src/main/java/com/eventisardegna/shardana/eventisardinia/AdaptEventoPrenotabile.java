@@ -154,7 +154,7 @@ class AdaptEventoPrenotabile extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    databaseReference.child("Eventi").child(alCustom.get(position).getLuogo()).child("prenotazioni").push().setValue(user.getUid());
+                    databaseReference.child("Eventi").child(alCustom.get(position).getLuogo()).child("prenotazioni").child(user.getDisplayName()).setValue(user.getUid());
                     DatabaseEvento.date_collection_arr=new ArrayList<DatabaseEvento>();
                 }
 

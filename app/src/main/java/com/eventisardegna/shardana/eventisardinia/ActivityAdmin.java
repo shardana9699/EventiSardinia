@@ -41,7 +41,9 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,7 +57,7 @@ public class ActivityAdmin extends AppCompatActivity implements View.OnClickList
     private EditText editTitolo;
     private EditText editDescrizione;
     public String luogo;
-    public String prenotazioni = "";
+    public HashMap<String, String> prenotazioni = new HashMap<>();
     private Button buttonEvent, getPlace, scegliSfondo;
     public Double latitude;
     public Double longitude;

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -14,9 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,7 +56,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener , NavigationView.OnNavigationItemSelectedListener {
     public GregorianCalendar mese_calendario, mese_calendario_copia;
@@ -72,22 +75,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public String image_url;
     private FirebaseStorage mStorage;
     private UploadTask mUploadTask;
+    private View EventiView;
+    private RecyclerView listaEventiView;
+    private DatabaseReference databaseReference;
+    private ArrayList<DatabaseEvento> eventi = new ArrayList<DatabaseEvento>();
+    private AdaptEvento adapter;
+    View mView;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+
+    {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        FirebaseMessaging.getInstance().subscribeToTopic("MyTopic");
+        listaEventiView = (RecyclerView) findViewById(R.id.row_adda);
+        listaEventiView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+
+        FirebaseMessaging.getInstance().subscribeToTopic("MyTopic");
 
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null){
-            if(user.isEmailVerified()) {
+        if (user != null) {
+            if (user.isEmailVerified()) {
 
-            }else{
-                startActivity(new Intent(getApplicationContext(),ActivityIconVerify.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), ActivityIconVerify.class));
             }
         }
         //GESTIONE ACTION BAR
@@ -102,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         navigationView.setNavigationItemSelectedListener(this);
         View navView = navigationView.inflateHeaderView(R.layout.header_tendina_utente);
         nav_profile_image = (ImageView) navView.findViewById(R.id.tendina_immagine_profilo);
-        if(user.getPhotoUrl() != null){
+        if (user.getPhotoUrl() != null) {
             Picasso.get().load(user.getPhotoUrl()).into(nav_profile_image);
         }
         nav_profile_image.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAspectRatio(60,60)
+                        .setAspectRatio(60, 60)
                         .start(ProfileActivity.this);
             }
         });
@@ -120,138 +135,138 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         nav_email_utente = (TextView) navView.findViewById(R.id.tendina_email);
         nav_email_utente.setText(user.getEmail());
 
+        eventi = new ArrayList<DatabaseEvento>();
+
 
         DatabaseEvento.date_collection_arr = new ArrayList<DatabaseEvento>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference();
+        databaseReference = database.getReference("Eventi");
         //POPOLAZIONE EVENTI DA DATABASE
-        databaseReference.child("Eventi").addValueEventListener(new ValueEventListener() {
+        databaseReference.addChildEventListener(new ChildEventListener() {
 
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // get all of the children at this level.
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                // shake hands with each of them.'
-                for (DataSnapshot child : children) {
-                    DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
-                    DatabaseEvento.date_collection_arr.add(databaseEvento);
-                }
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                loadData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                loadData(dataSnapshot);
+            }
+
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
 
             public void onCancelled(DatabaseError databaseError) {
-
             }
+
+
         });
 
+
+        /*adapter.setOnClickListener(new AdaptEvento.ClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                String mTitolo = getItem(position).getTitolo();
+
+                String mLuogo = getItem(position).getLuogo();
+
+                String mDescrizione = getItem(position).getDescrizione();
+
+                String mImage = getItem(position).getImmagine();
+
+                Intent intent = new Intent(view.getContext(), ProfileActivity.class);
+
+                intent.putExtra("title", mTitolo);
+
+                intent.putExtra("description", mLuogo);
+
+                intent.putExtra("descrizione", mDescrizione);
+
+                intent.putExtra("image", mImage);
+
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnItemLongClick(View view, int position) {
+
+            }
+        });*/
         //POPOLAZIONE INTERFACCIA SCORREVOLE DEGLI EVENTI
-        mRecyclerView = findViewById(R.id.row_adda);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         //mUploads = new ArrayList<>();
-        FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
-                        EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class, databaseReference.child("Eventi")
-                ) {
-                    @Override
-                    protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
-
-                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
-                    }
-
-                    @Override
-                    public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                        AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
-
-                        adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
-                            @Override
-                            public void OnItemClick(View view, int position) {
-
-                                String mTitolo = getItem(position).getTitolo();
-                                String mLuogo = getItem(position).getLuogo();
-                                String mDescrizione = getItem(position).getDescrizione();
-                                String mImage = getItem(position).getImmagine();
-                                Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
-                                intent.putExtra("title", mTitolo);
-                                intent.putExtra("description", mLuogo);
-                                intent.putExtra("descrizione", mDescrizione);
-                                intent.putExtra("image", mImage);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void OnItemLongClick(View view, int position) {
-
-                            }
-                        });
-
-                        return adaptEvento;
-                    }
-                };
 
 
+    }
 
-        mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
+    public void loadData(DataSnapshot dataSnapshot) {
+        // get all of the children at this level.
 
+        DatabaseEvento doc = dataSnapshot.getValue(DatabaseEvento.class);
+        DatabaseEvento eve = dataSnapshot.getValue(DatabaseEvento.class);
+        DatabaseEvento.date_collection_arr.add(eve);
+        eventi.add(doc);
+
+        adapter = new AdaptEvento(ProfileActivity.this, eventi);
+        listaEventiView.setAdapter(adapter);
     }
 
     @Override
     public void onClick(View v) {
 
+
+
     }
 
-    //RICERCA EVENTO
-    private void firebaseSearch(String searchText){
 
-        String query = searchText.toLowerCase();
+
+
+
+
+
+    //RICERCA EVENTO
+    private void firebaseSearch(String searchText) {
+
+
+        final String query = searchText.toLowerCase();
+
 
         mRef = FirebaseDatabase.getInstance().getReference().child("Eventi");
-        Query firebaseSearchQuery = mRef.orderByChild("luogo").startAt(query).endAt(query + "\uf0ff");
 
-        FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento> FirebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<EventoPrenotabile, AdaptEvento>(
-                        EventoPrenotabile.class, R.layout.addapt_evento, AdaptEvento.class,firebaseSearchQuery
-                ) {
-                    @Override
-                    protected void populateViewHolder(AdaptEvento viewHolder, EventoPrenotabile model, int position) {
+       // Query firebaseSearchQuery = mRef.orderByChild("luogo").startAt(query).endAt(query + "\uf0ff");
 
-                        viewHolder.setDetails(getApplicationContext(), model.getTitolo(), model.getLuogo(), model.getImmagine());
-                    }
-
-                    @Override
-                    public AdaptEvento onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                        AdaptEvento adaptEvento = super.onCreateViewHolder(parent, viewType);
-
-                        adaptEvento.setOnClickListener(new AdaptEvento.ClickListener() {
-                            @Override
-                            public void OnItemClick(View view, int position) {
-
-                                String mTitolo = getItem(position).getTitolo();
-                                String mLuogo = getItem(position).getLuogo();
-                                String mDescrizione = getItem(position).getDescrizione();
-                                String mImage = getItem(position).getImmagine();
-                                Intent intent = new Intent(view.getContext(), ActivityDettagliEvento.class);
-                                intent.putExtra("title", mTitolo);
-                                intent.putExtra("description", mLuogo);
-                                intent.putExtra("descrizione", mDescrizione);
-                                intent.putExtra("image", mImage);
-                                startActivity(intent);
+        ValueEventListener firebaseSearchQuery = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    eventi.clear();
+                    for(DataSnapshot dss : dataSnapshot.getChildren()){
+                            String luogo = dss.child("luogo").getValue(String.class);
+                            if(luogo.contains(query)) {
+                                final DatabaseEvento databaseEvento = dss.getValue(DatabaseEvento.class);
+                                eventi.add(databaseEvento);
                             }
-
-                            @Override
-                            public void OnItemLongClick(View view, int position) {
-
-                            }
-                        });
-
-                        return adaptEvento;
                     }
-                };
+                }
+                adapter = new AdaptEvento(ProfileActivity.this, eventi);
+                listaEventiView.setAdapter(adapter);
+            }
 
-        mRecyclerView.setAdapter(FirebaseRecyclerAdapter);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        };
+        mRef.addListenerForSingleValueEvent(firebaseSearchQuery);
     }
 
 
@@ -295,16 +310,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if(id == R.id.nav_my_account){
+        if (id == R.id.nav_my_account) {
             finish();
             startActivity(new Intent(this, ActivityModificaProfilo.class));
         }
-        if(id == R.id.nav_eventi_prenotati){
+        if (id == R.id.nav_eventi_prenotati) {
             finish();
             startActivity(new Intent(this, ActivityEventiPrenotati.class));
         }
 
-        if(id == R.id.nav_logout){
+        if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             finish();
             startActivity(new Intent(this, ActivityLogin.class));
@@ -342,7 +357,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if(id == R.id.calendario){
+        if (id == R.id.calendario) {
             final Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.dialog_calendario);
 
@@ -388,7 +403,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             dialogs.show();
 
         }
-        if(id == R.id.map){
+        if (id == R.id.map) {
             startActivity(new Intent(this, ActivityMaps.class));
         }
         if (toggle.onOptionsItemSelected(item)) {
@@ -403,7 +418,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         //VENGONO ASSEGNATI I VALORI DEL LUOGO
         //VIENE ASSEGNATO IL LINK DELL'IMMAGINE
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
@@ -413,6 +428,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
+
     private void uploadImageToFirebaseStorage() {
         //StorageReference profileImageRef = FirebaseStorage.getInstance().getReference("immaginiprofilo/"+System.currentTimeMillis()+ ".jpg");
 
@@ -458,16 +474,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     }
-    private void saveInformation(){
+
+    private void saveInformation() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null && image_url != null) {
+        if (user != null && image_url != null) {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(image_url)).build();
             user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
-                        if(user.getPhotoUrl() != null){
+                        if (user.getPhotoUrl() != null) {
                             Picasso.get().load(user.getPhotoUrl()).into(nav_profile_image);
                         }
                     }
@@ -475,14 +492,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
     }
+
     @Override
     public void onBackPressed() {
-        if(doubleTap){
+        if (doubleTap) {
             moveTaskToBack(true);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
-        }else{
-            Toast.makeText(this,"Premi indietro di nuovo per uscire dall'applicazione!",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Premi indietro di nuovo per uscire dall'applicazione!", Toast.LENGTH_SHORT).show();
             doubleTap = true;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -490,12 +508,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 public void run() {
                     doubleTap = false;
                 }
-            },1000);
+            }, 1000);
         }
     }
-
-
-
 
 
 }

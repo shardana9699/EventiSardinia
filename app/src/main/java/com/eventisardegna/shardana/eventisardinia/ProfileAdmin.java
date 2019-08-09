@@ -36,7 +36,7 @@ public class ProfileAdmin extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //INIZIALIZZAZIONE EVENTO
-        DatabaseEvento.date_collection_arr=new ArrayList<DatabaseEvento>();
+        EventoPrenotabile.date_collection_arr=new ArrayList<EventoPrenotabile>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference();
@@ -56,8 +56,8 @@ public class ProfileAdmin extends AppCompatActivity implements View.OnClickListe
 
                 // shake hands with each of them.'
                 for (DataSnapshot child : children) {
-                    DatabaseEvento databaseEvento = child.getValue(DatabaseEvento.class);
-                    DatabaseEvento.date_collection_arr.add(databaseEvento);
+                    EventoPrenotabile eventoPrenotabile = child.getValue(EventoPrenotabile.class);
+                    EventoPrenotabile.date_collection_arr.add(eventoPrenotabile);
                 }
 
             }
