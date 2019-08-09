@@ -62,6 +62,7 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
     private DatabaseReference databaseReference;
     private ArrayList<DatabaseEvento> eventi= new ArrayList<DatabaseEvento>();
     private AdaptEvento adapter;
+    private AdaptEvento.OnItemClickListener itemClickListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,8 +133,24 @@ public class ActivityEventiPrenotati extends AppCompatActivity implements Naviga
             DatabaseEvento databaseEvento = dataSnapshot.getValue(DatabaseEvento.class);
             eventi.add(databaseEvento);
 
-            adapter = new AdaptEvento(ActivityEventiPrenotati.this, eventi);
-            listaEventiView.setAdapter(adapter);
+            adapter = new AdaptEvento(ActivityEventiPrenotati.this, eventi, itemClickListener);
+            listaEventiView.setAdapter(new AdaptEvento(ActivityEventiPrenotati.this, eventi, new AdaptEvento.OnItemClickListener() {
+                @Override public void onItemClick(DatabaseEvento item) {
+
+                    String mTitolo = item.getTitolo();
+                    String mLuogo = item.getLuogo();
+                    String mDescrizione = item.getDescrizione();
+                    String mImage = item.getImmagine();
+                    Intent intent = new Intent(listaEventiView.getContext(), ActivityDettagliEvento.class);
+                    intent.putExtra("title", mTitolo);
+                    intent.putExtra("description", mLuogo);
+                    intent.putExtra("descrizione", mDescrizione);
+                    intent.putExtra("image", mImage);
+                    startActivity(intent);
+                }
+
+
+            }));
         }
     }
 

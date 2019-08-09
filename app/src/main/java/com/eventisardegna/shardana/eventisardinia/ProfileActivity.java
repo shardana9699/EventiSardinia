@@ -57,7 +57,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener , NavigationView.OnNavigationItemSelectedListener {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public GregorianCalendar mese_calendario, mese_calendario_copia;
     private AdaptCalendario adaptCalendario;
     private TextView testo_mese;
@@ -80,6 +80,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference databaseReference;
     private ArrayList<DatabaseEvento> eventi = new ArrayList<DatabaseEvento>();
     private AdaptEvento adapter;
+    private AdaptEvento.OnItemClickListener itemClickListener;
     View mView;
 
     @Override
@@ -170,36 +171,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         });
 
-
-        /*adapter.setOnClickListener(new AdaptEvento.ClickListener() {
-            @Override
-            public void OnItemClick(View view, int position) {
-                String mTitolo = getItem(position).getTitolo();
-
-                String mLuogo = getItem(position).getLuogo();
-
-                String mDescrizione = getItem(position).getDescrizione();
-
-                String mImage = getItem(position).getImmagine();
-
-                Intent intent = new Intent(view.getContext(), ProfileActivity.class);
-
-                intent.putExtra("title", mTitolo);
-
-                intent.putExtra("description", mLuogo);
-
-                intent.putExtra("descrizione", mDescrizione);
-
-                intent.putExtra("image", mImage);
-
-                startActivity(intent);
-            }
-
-            @Override
-            public void OnItemLongClick(View view, int position) {
-
-            }
-        });*/
         //POPOLAZIONE INTERFACCIA SCORREVOLE DEGLI EVENTI
 
 
@@ -223,8 +194,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             eventi.add(doc);
         }
 
-        adapter = new AdaptEvento(ProfileActivity.this, eventi);
-        listaEventiView.setAdapter(adapter);
+        adapter = new AdaptEvento(ProfileActivity.this, eventi, itemClickListener);
+        //listaEventiView.setAdapter(adapter);
+        listaEventiView.setAdapter(new AdaptEvento(ProfileActivity.this, eventi, new AdaptEvento.OnItemClickListener() {
+            @Override public void onItemClick(DatabaseEvento item) {
+
+                String mTitolo = item.getTitolo();
+                String mLuogo = item.getLuogo();
+                String mDescrizione = item.getDescrizione();
+                String mImage = item.getImmagine();
+                Intent intent = new Intent(listaEventiView.getContext(), ActivityDettagliEvento.class);
+                intent.putExtra("title", mTitolo);
+                intent.putExtra("description", mLuogo);
+                intent.putExtra("descrizione", mDescrizione);
+                intent.putExtra("image", mImage);
+                startActivity(intent);
+            }
+
+
+        }));
     }
     public void removeData(DataSnapshot dataSnapshot) {
         // get all of the children at this level.
@@ -234,19 +222,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         DatabaseEvento.date_collection_arr.remove(eve);
         eventi.remove(doc);
 
-        adapter = new AdaptEvento(ProfileActivity.this, eventi);
+        adapter = new AdaptEvento(ProfileActivity.this, eventi, itemClickListener);
         listaEventiView.setAdapter(adapter);
     }
-
-    @Override
-    public void onClick(View v) {
-
-
-
-    }
-
-
-
 
 
 
@@ -275,8 +253,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             }
                     }
                 }
-                adapter = new AdaptEvento(ProfileActivity.this, eventi);
-                listaEventiView.setAdapter(adapter);
+                adapter = new AdaptEvento(ProfileActivity.this, eventi, itemClickListener);
+                listaEventiView.setAdapter(new AdaptEvento(ProfileActivity.this, eventi, new AdaptEvento.OnItemClickListener() {
+                    @Override public void onItemClick(DatabaseEvento item) {
+
+                        String mTitolo = item.getTitolo();
+                        String mLuogo = item.getLuogo();
+                        String mDescrizione = item.getDescrizione();
+                        String mImage = item.getImmagine();
+                        Intent intent = new Intent(listaEventiView.getContext(), ActivityDettagliEvento.class);
+                        intent.putExtra("title", mTitolo);
+                        intent.putExtra("description", mLuogo);
+                        intent.putExtra("descrizione", mDescrizione);
+                        intent.putExtra("image", mImage);
+                        startActivity(intent);
+                    }
+
+
+                }));
             }
 
 
